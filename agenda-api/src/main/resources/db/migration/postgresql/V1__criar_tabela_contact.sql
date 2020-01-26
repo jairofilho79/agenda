@@ -1,6 +1,6 @@
 create table contact(
-id serial NOT NULL,
-name varchar(50) NOT NULL,
-phone varchar(15) NOT NULL,
+id serial,
+name varchar(50),
+phone varchar(15),
 email varchar(100),
 primary key (id));
