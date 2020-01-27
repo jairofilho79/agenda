@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.agenda.api.controller.dto.ContactDTO;
+
 import lombok.Data;
 
 @Entity
@@ -29,5 +31,14 @@ public class Contact implements Serializable{
 	private String phone;
 	
 	private String email;
+
+	public ContactDTO toDTO() {
+		ContactDTO dto = new ContactDTO();
+		dto.setId(id);
+		dto.setName(name);
+		dto.setPhone(phone);
+		dto.setEmail(email);
+		return dto;
+	}
 
 }

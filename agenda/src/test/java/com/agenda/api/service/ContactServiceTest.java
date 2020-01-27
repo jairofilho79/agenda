@@ -35,7 +35,6 @@ public class ContactServiceTest {
 			.willReturn(Optional.of(new Contact()));
 	}
 	
-	
 	@Test
 	public void testFindByPhone() {
 		Optional<Contact> contact = service.findByPhone("99999-99999");
