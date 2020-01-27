@@ -1,0 +1,28 @@
+package com.agenda.api.service.impl;
+
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.agenda.api.entity.Contact;
+import com.agenda.api.repository.ContactRepository;
+import com.agenda.api.service.ContactService;
+
+@Service
+public class ContactServiceImpl implements ContactService {
+
+	@Autowired
+	private ContactRepository repository;
+
+	@Override
+	public Contact save(Contact contact) {
+		return repository.save(contact);
+	}
+
+	@Override
+	public Optional<Contact> findByPhone(String phone) {
+		return repository.findByPhoneEquals(phone);
+	}
+
+}
