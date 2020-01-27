@@ -28,6 +28,11 @@ public class ContactController {
 		
 		Response<ContactDTO> response = new Response<>();
 		
+		if (result.hasErrors()) {
+			result.getAllErrors().forEach(e -> response.addErros(e.getDefaultMessage()));
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+		}
+		
 		Contact contact = service.save(dto.toContact());
 		
 		response.setData(contact.toDTO());
