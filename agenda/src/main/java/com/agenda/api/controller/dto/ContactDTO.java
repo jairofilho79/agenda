@@ -27,6 +27,7 @@ public class ContactDTO {
 
 	public Contact toContact() {
 		Contact c = new Contact();
+		c.setId(id);
 		c.setName(name);
 		c.setPhone(phone);
 		c.setEmail(email);

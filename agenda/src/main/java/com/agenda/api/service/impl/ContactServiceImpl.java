@@ -1,5 +1,7 @@
 package com.agenda.api.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,21 @@ public class ContactServiceImpl implements ContactService {
 	@Override
 	public Optional<Contact> findByPhone(String phone) {
 		return repository.findByPhoneEquals(phone);
+	}
+
+	@Override
+	public Optional<Contact> findById(Long id) {
+		return repository.findById(id);
+	}
+
+	@Override
+	public List<Contact> findAll() {
+		return repository.findAll().isEmpty() ? new ArrayList<Contact>() : repository.findAll();
+	}
+
+	@Override
+	public void deleteById(Long id) {
+		repository.deleteById(id);
 	}
 
 }

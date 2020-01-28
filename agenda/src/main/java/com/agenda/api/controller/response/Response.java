@@ -13,6 +13,7 @@ import lombok.Setter;
 public class Response<T> {
 	
 	private T data;
+	private List<T> datas;
 	private List<String> errors;
 	
 	public void addErros(String error) {
@@ -21,6 +22,14 @@ public class Response<T> {
 		}
 		
 		this.errors.add(error);
+	} 
+	
+	public void addDatas(T dados) {
+		if (this.datas == null) {
+			this.datas = new ArrayList<T>();
+		}
+
+		this.datas.add(dados);
 	}
 
 }
