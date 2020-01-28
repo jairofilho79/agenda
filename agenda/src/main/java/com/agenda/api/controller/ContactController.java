@@ -99,7 +99,7 @@ public class ContactController {
 		Optional<Contact> c = service.findById(id);
 
 		if (!c.isPresent()) {
-			response.addErros("Contato de id " + id + " não encontrada");
+			response.addErros("Contato de id " + id + " não encontrado");
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
 		}
 		
