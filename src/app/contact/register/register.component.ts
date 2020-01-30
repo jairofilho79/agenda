@@ -27,25 +27,22 @@ export class RegisterComponent implements OnInit {
 
     this.contact.name = this.nameInput.value;
     this.contact.email = this.emailInput.value;
-    this.contact.phone = parseInt(this.phoneInput.value) || null;
+    const phone = this.registerService.validatePhone(this.phoneInput.value);
 
-    if(this.contact.phone !== null) {
-      if(
-        this.contact.phone.toString().length !== 10 &&
-        this.contact.phone.toString().length !== 11
-       ) {
-         alert("Telefone Inválido!")
-         this.phoneInput.value = ""
-         this.phoneInput.focus();
-         return;
-       }
-
+    if(phone === false) {
+      this.phoneInput.value;
+      this.phoneInput.focus();
+      alert('Telefone Inválido');
+      return;
     }
 
-    console.log(this.contact)
+    this.contact.phone = <number>phone;
 
-    this.registerService.registerContact(this.contact).subscribe(response => {
-      console.log(response);
+    this.registerService.registerContact(this.contact).subscribe(() => {
+      this.nameInput.value = ""
+      this.emailInput.value = ""
+      this.phoneInput.value = ""
+      alert('Contato Salvo com sucesso!')
     })
   }
 

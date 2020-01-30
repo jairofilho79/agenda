@@ -12,4 +12,8 @@ export class ListContactService {
   getContacts() {
     return this.http.get<Contact[]>(this.API+"/contacts")
   }
+
+  editContact(contact:Contact) {
+    return this.http.put<Contact>(this.API+'/contact/'+contact.id, contact)
+  }
 }

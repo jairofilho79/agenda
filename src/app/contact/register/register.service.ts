@@ -11,4 +11,19 @@ export class RegisterService {
   registerContact(contact:Contact) {
     return this.http.post(this.API+'/contact', contact)
   }
+
+  validatePhone(p) {
+    if(p === "") return null;
+
+    const phone = parseInt(p.trim());
+
+    if(phone === NaN) return false;
+
+    if(phone.toString().length !== 10 && phone.toString().length !== 11) {
+      return false;
+    }
+
+    return phone;
+
+  }
 }

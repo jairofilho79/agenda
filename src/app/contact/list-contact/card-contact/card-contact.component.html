@@ -14,12 +14,12 @@
 <ng-template #editMode>
   <div class="card" style="width: 18rem;">
     <div class="card-body">
-      <input type="text" [value]="contact.name">
-      <p class="card-text">{{contact.email}}</p>
-      <p class="card-text">{{contact.phone | phone}}</p>
-      <div class="d-inline position-relative bottom">
-        <button (click)="editContact()" class="btn btn-sm btn-secondary  mr-3">Editar</button>
-        <button (click)="deleteContact()" class="btn btn-sm btn-danger">Excluir</button>
+      <input id="name" class="my-2" type="text" [value]="contact.name">
+      <input id="email" class="my-2" type="text" [value]="contact.email">
+      <input id="phone" class="my-2" type="text" [value]="contact.phone">
+      <div class="my-2" class="d-inline position-relative bottom">
+        <button (click)="saveContact()" class="btn btn-sm btn-success mr-3">Salvar</button>
+        <button (click)="cancelEditContact()" class="btn btn-sm btn-warning">Cancelar</button>
       </div>
     </div>
   </div>
