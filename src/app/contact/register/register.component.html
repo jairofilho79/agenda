@@ -1,1 +1,26 @@
-<p>register works!</p>
+<div class="mx-5">
+  <h1 class="text-center">Cadastrar contato</h1>
+
+  <form>
+    <div class="form-group">
+      <label for="name">Nome:</label>
+      <input type="text" class="form-control" id="name" placeholder="Nome" required>
+    </div>
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Email" required>
+    </div>
+    <div class="form-group">
+      <label for="phone">Telefone:</label>
+      <input type="number" class="form-control" id="phone" placeholder="Telefone celular ou residencial">
+    </div>
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="register()"
+    >
+      Cadastrar
+    </button>
+  </form>
+</div>
+
