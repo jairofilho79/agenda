@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Contact } from '../contact';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-list-contact',
@@ -7,9 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ListContactComponent implements OnInit {
 
-  constructor() { }
+  contacts:Contact[];
+
+  constructor(private activatedRoute:ActivatedRoute) { }
 
   ngOnInit() {
+    this.contacts = this.activatedRoute.snapshot.data.contacts;
   }
 
 }
