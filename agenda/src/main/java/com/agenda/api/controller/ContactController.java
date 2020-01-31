@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.agenda.api.controller.dto.ContactDTO;
 import com.agenda.api.controller.response.Response;
+import com.agenda.api.controller.response.ResponseList;
 import com.agenda.api.entity.Contact;
 import com.agenda.api.service.ContactService;
 
@@ -76,24 +77,18 @@ public class ContactController {
 	}
 	
 	@GetMapping("contacts")
-	public ResponseEntity<List<Response<ContactDTO>>> findAll(){
+	public ResponseEntity<ResponseList<ContactDTO>> findAll(){
 		
-		List<Response<ContactDTO>> responses = new ArrayList<>();
+		ResponseList<ContactDTO> responses = new ResponseList<ContactDTO>();
 		
 		List<Contact> contacts = service.findAll(); 
 		
 		if (contacts.isEmpty() || contacts == null) {
-			Response<ContactDTO> response = new Response<>();
-			response.addErros("Nenhum contato foi encontrado");
-			responses.add(response);
+			responses.addErros("Nenhum contato foi encontrado");
 			return ResponseEntity.status(HttpStatus.OK).body(responses);
 		}
 		
-		for (Contact c : contacts) {
-			Response<ContactDTO> r = new Response<>();
-			r.setData(c.toDTO());
-			responses.add(r);
-		}
+		contacts.forEach(c -> responses.addData(c.toDTO()));
 		
 		return ResponseEntity.status(HttpStatus.OK).body(responses);
 		
