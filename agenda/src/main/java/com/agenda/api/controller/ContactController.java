@@ -1,5 +1,6 @@
 package com.agenda.api.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,20 +76,26 @@ public class ContactController {
 	}
 	
 	@GetMapping("contacts")
-	public ResponseEntity<Response<ContactDTO>> findAll(){
+	public ResponseEntity<List<Response<ContactDTO>>> findAll(){
 		
-		Response<ContactDTO> response = new Response<>();
+		List<Response<ContactDTO>> responses = new ArrayList<>();
 		
 		List<Contact> contacts = service.findAll(); 
 		
 		if (contacts.isEmpty() || contacts == null) {
+			Response<ContactDTO> response = new Response<>();
 			response.addErros("Nenhum contato foi encontrado");
-			return ResponseEntity.status(HttpStatus.OK).body(response);
+			responses.add(response);
+			return ResponseEntity.status(HttpStatus.OK).body(responses);
 		}
 		
-		contacts.forEach(c -> response.addDatas(c.toDTO()));
+		for (Contact c : contacts) {
+			Response<ContactDTO> r = new Response<>();
+			r.setData(c.toDTO());
+			responses.add(r);
+		}
 		
-		return ResponseEntity.status(HttpStatus.OK).body(response);
+		return ResponseEntity.status(HttpStatus.OK).body(responses);
 		
 	}
 	
