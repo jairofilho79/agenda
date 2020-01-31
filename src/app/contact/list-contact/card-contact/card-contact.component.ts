@@ -45,8 +45,9 @@ export class CardContactComponent implements OnInit {
       return;
     }
 
-    this.listContactService.editContact(this.editContactObj).subscribe(contact => {
-      this.contact = contact;
+    this.listContactService.editContact(this.editContactObj).subscribe(response => {
+      if(response.errors !== null) {throw new Error(response.errors)}
+      this.contact = response.data;
       this.isEditing = false;
       alert('Contato alterado com sucesso!')
     })

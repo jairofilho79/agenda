@@ -14,11 +14,10 @@ export class ListContactComponent implements OnInit {
   constructor(private activatedRoute:ActivatedRoute) { }
 
   ngOnInit() {
-    this.contacts = this.activatedRoute.snapshot.data.contacts;
+    this.contacts = this.activatedRoute.snapshot.data.contacts.data;
   }
 
   removeDeletedContact(index) {
-    console.log(index);
     this.contacts.splice(index, 1)
   }
 

@@ -3,7 +3,6 @@ import { PipeTransform, Pipe } from '@angular/core';
 @Pipe({ name: 'phone'})
 export class PhonePipe implements PipeTransform {
   transform(value: number) {
-    if(value === null) return "Sem Telefone";
 
     const str = value.toString()
     const mobile = str.length % 2;

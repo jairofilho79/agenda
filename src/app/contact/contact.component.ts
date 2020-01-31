@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-contacts',
@@ -7,7 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ContactComponent implements OnInit {
 
-  constructor() { }
+  currentUrl:string;
+
+  constructor(private _router: Router) {
+    _router.events.subscribe((val) => {
+      if(val instanceof NavigationEnd) {
+        this.currentUrl = val.url
+      }
+    })
+  }
 
   ngOnInit() {
   }

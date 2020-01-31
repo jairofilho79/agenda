@@ -5,7 +5,9 @@ import { Contact } from '../contact';
 
 @Injectable( { providedIn:'root' } )
 export class RegisterService {
-  API = "http://localhost:3000"
+  // API = "http://localhost:3000"
+  API = "https://jns-agenda-api.herokuapp.com"
+
   constructor(private http: HttpClient) {}
 
   registerContact(contact:Contact) {
@@ -13,7 +15,7 @@ export class RegisterService {
   }
 
   validatePhone(p) {
-    if(p === "") return null;
+    if(p === "") return false;
 
     const phone = parseInt(p.trim());
 
