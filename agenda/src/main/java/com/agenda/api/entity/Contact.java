@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import com.agenda.api.controller.dto.ContactDTO;
 
 import lombok.Data;
@@ -21,7 +23,8 @@ public class Contact implements Serializable{
 	private static final long serialVersionUID = 4447040082645947335L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(generator = "increment")
+	@GenericGenerator(name = "increment", strategy = "increment")
 	private Long id;
 	
 	@Column(nullable = false)
