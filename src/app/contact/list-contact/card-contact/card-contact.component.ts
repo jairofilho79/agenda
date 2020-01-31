@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { Contact } from '../../contact';
 import { ListContactService } from '../list-contact.service';
@@ -12,6 +12,7 @@ import { RegisterService } from '../../register/register.service';
 export class CardContactComponent implements OnInit {
 
   @Input() contact:Contact;
+  @Output() deleteContactEvent = new EventEmitter()
   isEditing:boolean = false;
   editContactObj:any = {}
 
@@ -40,7 +41,7 @@ export class CardContactComponent implements OnInit {
 
     if(this.editContactObj.phone === false) {
       phone.focus();
-      alert('Telefone Inválido')
+      alert('Telefone inválido')
       return;
     }
 
@@ -52,7 +53,11 @@ export class CardContactComponent implements OnInit {
   }
 
   deleteContact() {
-
+    this.listContactService.deleteContact(this.contact.id)
+      .subscribe(() => {
+        this.deleteContactEvent.emit("");
+        alert('Contato excluído com sucesso!')
+      })
   }
 
 }

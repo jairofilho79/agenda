@@ -32,7 +32,7 @@ export class RegisterComponent implements OnInit {
     if(phone === false) {
       this.phoneInput.value;
       this.phoneInput.focus();
-      alert('Telefone Inválido');
+      alert('Telefone inválido');
       return;
     }
 
@@ -42,7 +42,7 @@ export class RegisterComponent implements OnInit {
       this.nameInput.value = ""
       this.emailInput.value = ""
       this.phoneInput.value = ""
-      alert('Contato Salvo com sucesso!')
+      alert('Contato salvo com sucesso!')
     })
   }
 

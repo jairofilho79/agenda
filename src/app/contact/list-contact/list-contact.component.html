@@ -4,8 +4,9 @@
   <div class="row">
     <app-card-contact
       class="d-flex col-3 my-3"
-      *ngFor="let contact of contacts"
+      *ngFor="let contact of contacts; let i=index"
       [contact]="contact"
+      (deleteContactEvent)="removeDeletedContact(i)"
     >
     </app-card-contact>
   </div>

@@ -17,4 +17,9 @@ export class ListContactComponent implements OnInit {
     this.contacts = this.activatedRoute.snapshot.data.contacts;
   }
 
+  removeDeletedContact(index) {
+    console.log(index);
+    this.contacts.splice(index, 1)
+  }
+
 }

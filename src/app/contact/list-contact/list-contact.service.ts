@@ -16,4 +16,8 @@ export class ListContactService {
   editContact(contact:Contact) {
     return this.http.put<Contact>(this.API+'/contact/'+contact.id, contact)
   }
+
+  deleteContact(id:number) {
+    return this.http.delete<Contact>(this.API+'/contact/'+id)
+  }
 }
