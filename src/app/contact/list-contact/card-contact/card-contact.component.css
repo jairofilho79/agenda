@@ -1,3 +1,5 @@
 .bottom {
   bottom: 0em;
 }
+
+input { width: 100% !important }

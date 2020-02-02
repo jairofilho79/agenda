@@ -3,6 +3,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Contact } from '../../contact';
 import { ListContactService } from '../list-contact.service';
 import { RegisterService } from '../../register/register.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-card-contact',
@@ -18,7 +19,8 @@ export class CardContactComponent implements OnInit {
 
   constructor(
     private listContactService:ListContactService,
-    private registerService:RegisterService
+    private registerService:RegisterService,
+    private toast:ToastrService
     ) { }
 
   ngOnInit() {}
@@ -41,7 +43,7 @@ export class CardContactComponent implements OnInit {
 
     if(this.editContactObj.phone === false) {
       phone.focus();
-      alert('Telefone inválido')
+      this.toast.warning('Telefone inválido', 'Atenção!')
       return;
     }
 
@@ -49,7 +51,7 @@ export class CardContactComponent implements OnInit {
       if(response.errors !== null) {throw new Error(response.errors)}
       this.contact = response.data;
       this.isEditing = false;
-      alert('Contato alterado com sucesso!')
+      this.toast.success('Contato alterado!', 'Sucesso!')
     })
   }
 
@@ -57,7 +59,7 @@ export class CardContactComponent implements OnInit {
     this.listContactService.deleteContact(this.contact.id)
       .subscribe(() => {
         this.deleteContactEvent.emit("");
-        alert('Contato excluído com sucesso!')
+        this.toast.success('Contato excluído!', 'Sucesso!')
       })
   }
 

@@ -9,6 +9,7 @@ import { RegisterComponent } from './register/register.component';
 import { CardContactComponent } from './list-contact/card-contact/card-contact.component';
 import { PhonePipe } from './list-contact/card-contact/phone.pipe';
 import { NamePipe } from './list-contact/card-contact/name.pipe';
+import { WelcomeComponent } from './welcome/welcome.component';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { NamePipe } from './list-contact/card-contact/name.pipe';
     RegisterComponent,
     CardContactComponent,
     PhonePipe,
-    NamePipe
+    NamePipe,
+    WelcomeComponent
   ],
   imports: [
     CommonModule,

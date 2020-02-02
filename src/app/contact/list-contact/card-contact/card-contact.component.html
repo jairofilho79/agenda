@@ -14,9 +14,9 @@
 <ng-template #editMode>
   <div class="card" style="width: 18rem;">
     <div class="card-body">
-      <input id="name" class="my-2" type="text" [value]="contact.name">
-      <input id="email" class="my-2" type="text" [value]="contact.email">
-      <input id="phone" class="my-2" type="text" [value]="contact.phone">
+      <input class="form-control" id="name" class="my-2" type="text" [value]="contact.name">
+      <input class="form-control" id="phone" class="my-2" type="text" [value]="contact.phone">
+      <input class="form-control" id="email" class="my-2" type="text" [value]="contact.email">
       <div class="my-2" class="d-inline position-relative bottom">
         <button (click)="saveContact()" class="btn btn-sm btn-success mr-3">Salvar</button>
         <button (click)="cancelEditContact()" class="btn btn-sm btn-warning">Cancelar</button>

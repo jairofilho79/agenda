@@ -6,6 +6,7 @@ import { ListContactComponent } from './contact/list-contact/list-contact.compon
 import { RegisterComponent } from './contact/register/register.component';
 import { NotFoundComponent } from './error/not-found/not-found.component';
 import { ListContactResolver } from './contact/list-contact/list-contact.resolver';
+import { WelcomeComponent } from './contact/welcome/welcome.component';
 
 
 const routes: Routes = [
@@ -13,6 +14,10 @@ const routes: Routes = [
     path: 'contacts',
     component: ContactComponent,
     children: [
+      {
+        path:'',
+        component: WelcomeComponent
+      },
       {
         path: 'list-contact',
         component: ListContactComponent,

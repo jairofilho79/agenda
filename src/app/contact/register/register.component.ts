@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Contact } from '../contact';
 import { RegisterService } from './register.service';
+import { ToastrService } from 'ngx-toastr';
+
 
 @Component({
   selector: 'app-register',
@@ -15,7 +17,10 @@ export class RegisterComponent implements OnInit {
   private emailInput;
   private phoneInput;
 
-  constructor(private registerService:RegisterService) { }
+  constructor(
+    private registerService:RegisterService,
+    private toast: ToastrService
+    ) { }
 
   ngOnInit() {
     this.nameInput = (<HTMLInputElement>document.querySelector("#name"))
@@ -32,7 +37,7 @@ export class RegisterComponent implements OnInit {
     if(phone === false) {
       this.phoneInput.value;
       this.phoneInput.focus();
-      alert('Telefone inválido');
+      this.toast.warning("Telefone Inválido", "Atenção!")
       return;
     }
 
@@ -42,7 +47,7 @@ export class RegisterComponent implements OnInit {
       this.nameInput.value = ""
       this.emailInput.value = ""
       this.phoneInput.value = ""
-      alert('Contato salvo com sucesso!')
+      this.toast.success('Contato salvo!', "Sucesso!")
     })
   }
 
