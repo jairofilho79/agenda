@@ -6,7 +6,7 @@
     <p class="card-text">{{contact.email ? contact.email : 'Sem E-mail'}}</p>
     <div class="d-inline position-relative bottom">
       <button (click)="editContact()" class="btn btn-sm btn-secondary  mr-3">Editar</button>
-      <button (click)="deleteContact()" class="btn btn-sm btn-danger">Excluir</button>
+      <button [disabled]="isDeleting" (click)="deleteContact()" class="btn btn-sm btn-danger">Excluir <i *ngIf="isDeleting" class="fa fa-spinner fa-pulse"></i></button>
     </div>
   </div>
 </div>
@@ -18,8 +18,20 @@
       <input class="form-control" id="phone" class="my-2" type="text" [value]="contact.phone">
       <input class="form-control" id="email" class="my-2" type="text" [value]="contact.email">
       <div class="my-2" class="d-inline position-relative bottom">
-        <button (click)="saveContact()" class="btn btn-sm btn-success mr-3">Salvar</button>
-        <button (click)="cancelEditContact()" class="btn btn-sm btn-warning">Cancelar</button>
+        <button
+          [disabled]="isSaving"
+          (click)="saveContact()"
+          class="btn btn-sm btn-success mr-3"
+        >
+          Salvar
+          <i *ngIf="isSaving" class="fa fa-spinner fa-pulse"></i>
+        </button>
+        <button
+          (click)="cancelEditContact()"
+          class="btn btn-sm btn-warning"
+        >
+          Cancelar
+        </button>
       </div>
     </div>
   </div>

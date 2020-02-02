@@ -1,7 +1,7 @@
 <div class="mx-5">
   <h1 class="text-center my-3">Cadastrar contato</h1>
 
-  <form>
+  <form (ngSubmit)="$event.preventDefault(); register()" ngNativeValidate>
     <div class="form-group">
       <label for="name">*Nome:</label>
       <input type="text" class="form-control" id="name" placeholder="Nome" required>
@@ -15,11 +15,12 @@
       <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Email">
     </div>
     <button
-      type="button"
+      type="submit"
       class="btn btn-primary"
-      (click)="register()"
+      [disabled]="isRegistering"
     >
       Cadastrar
+      <i *ngIf="isRegistering" class="fa fa-spinner fa-pulse"></i>
     </button>
   </form>
 </div>

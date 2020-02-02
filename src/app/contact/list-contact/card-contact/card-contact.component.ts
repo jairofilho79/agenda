@@ -14,8 +14,10 @@ export class CardContactComponent implements OnInit {
 
   @Input() contact:Contact;
   @Output() deleteContactEvent = new EventEmitter()
-  isEditing:boolean = false;
   editContactObj:any = {}
+  isEditing:boolean = false;
+  isSaving:boolean = false;
+  isDeleting:boolean = false;
 
   constructor(
     private listContactService:ListContactService,
@@ -34,6 +36,7 @@ export class CardContactComponent implements OnInit {
   }
 
   saveContact() {
+    this.isSaving = true;
     const phone = (<HTMLInputElement>document.querySelector("#phone"))
 
     this.editContactObj.id = this.contact.id;
@@ -43,22 +46,41 @@ export class CardContactComponent implements OnInit {
 
     if(this.editContactObj.phone === false) {
       phone.focus();
-      this.toast.warning('Telefone inválido', 'Atenção!')
+      this.isSaving = false;
+      this.toast.error('Telefone inválido', 'Erro!')
       return;
     }
 
-    this.listContactService.editContact(this.editContactObj).subscribe(response => {
-      if(response.errors !== null) {throw new Error(response.errors)}
-      this.contact = response.data;
-      this.isEditing = false;
-      this.toast.success('Contato alterado!', 'Sucesso!')
-    })
+    this.listContactService.editContact(this.editContactObj)
+    .subscribe(
+      response => {
+        this.contact = response.data;
+        this.isSaving = false;
+        this.isEditing = false;
+        this.toast.success('Contato alterado!', 'Sucesso!')
+      },
+      err => {
+        this.isSaving = false;
+        for(let error of err.errors) {
+          this.toast.error(error, "Erro!");
+        }
+      }
+    )
   }
 
   deleteContact() {
+    this.isDeleting = true;
+
     this.listContactService.deleteContact(this.contact.id)
-      .subscribe(() => {
+      .subscribe((response:any) => {
+        if(response.errors) {
+          for(let error of response.errors) {
+            this.toast.error(error);
+            return;
+          }
+        }
         this.deleteContactEvent.emit("");
+        this.isDeleting = false;
         this.toast.success('Contato excluído!', 'Sucesso!')
       })
   }

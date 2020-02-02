@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 import { ContactComponent } from './contact.component';
 import { ListContactComponent } from './list-contact/list-contact.component';
@@ -25,7 +26,8 @@ import { WelcomeComponent } from './welcome/welcome.component';
   imports: [
     CommonModule,
     HttpClientModule,
-    RouterModule
+    RouterModule,
+    FormsModule
   ]
 })
 export class ContactModule { }
