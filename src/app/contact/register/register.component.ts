@@ -17,7 +17,7 @@ export class RegisterComponent implements OnInit {
   private emailInput;
   private phoneInput;
 
-  private isRegistering:boolean = false;
+  isRegistering:boolean = false;
 
   constructor(
     private registerService:RegisterService,
