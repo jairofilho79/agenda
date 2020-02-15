@@ -12,8 +12,6 @@ import { LoaderComponent } from './loader/loader.component';
 import { LoaderService } from './loader.service';
 import { LoaderInterceptor } from './loader.interceptor';
 
-
-
 @NgModule({
   declarations: [
     AppComponent,

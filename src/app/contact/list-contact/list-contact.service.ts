@@ -1,17 +1,27 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 import { Contact } from '../contact';
+import { SearchParams } from './search/searchParams';
 
 @Injectable({providedIn: 'root'})
 export class ListContactService {
   constructor(private http: HttpClient) {}
 
   // API = "http://localhost:3000"
-  API = "https://jns-agenda-api.herokuapp.com"
+  API = environment.API_URI;
 
-  getContacts() {
-    return this.http.get<Contact[]>(this.API+"/contact/contacts")
+  getContacts(userParams: SearchParams = null) {
+    let params = new HttpParams();
+
+    if(userParams != null) {
+      const keys = Object.keys(userParams);
+      for (let key of keys) {
+        params = params.append(key, userParams[key]);
+      }
+    }
+    return this.http.get<Contact[]>(this.API+"/contact", { params })
   }
 
   editContact(contact:Contact) {

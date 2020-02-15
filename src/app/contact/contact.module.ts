@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ContactComponent } from './contact.component';
 import { ListContactComponent } from './list-contact/list-contact.component';
@@ -11,6 +11,8 @@ import { CardContactComponent } from './list-contact/card-contact/card-contact.c
 import { PhonePipe } from './list-contact/card-contact/phone.pipe';
 import { NamePipe } from './list-contact/card-contact/name.pipe';
 import { WelcomeComponent } from './welcome/welcome.component';
+import { SearchComponent } from './list-contact/search/search.component';
+import { PhoneMaskDirective } from './register/phoneMask.directive';
 
 
 @NgModule({
@@ -21,13 +23,16 @@ import { WelcomeComponent } from './welcome/welcome.component';
     CardContactComponent,
     PhonePipe,
     NamePipe,
-    WelcomeComponent
+    PhoneMaskDirective,
+    WelcomeComponent,
+    SearchComponent
   ],
   imports: [
     CommonModule,
     HttpClientModule,
     RouterModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class ContactModule { }

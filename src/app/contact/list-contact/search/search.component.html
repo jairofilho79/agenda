@@ -1,0 +1,51 @@
+
+
+<form [formGroup]="searchForm">
+  <div class="form-group">
+    <input
+      formControlName="search"
+      class="form-control"
+      type="text"
+      placeholder="Procure pelo nome, e-mail ou telefone [Enter]"
+      (keydown.enter)="$event.preventDefault(); searchContacts()"
+    >
+  </div>
+
+  <div class="form-group d-flex justify-content-around" >
+    <div>
+      <label class="control-label mr-1" for="linePerPage">Contatos por página:</label>
+      <input
+        formControlName="linesPerPage"
+        type="number"
+        id="linePerPage"
+        (keydown.enter)="$event.preventDefault(); searchContacts()"
+      >
+    </div>
+
+    <div>
+      <select
+        name="orderBy"
+        formControlName="orderBy"
+        (keydown.enter)="$event.preventDefault(); searchContacts()"
+      >
+        <option value="name">Nome</option>
+        <option value="phone">Telefone</option>
+        <option value="email">E-mail</option>
+      </select>
+    </div>
+    <p ></p>
+    <div>
+
+      <select
+        name="sortBy"
+        id="sortBy"
+        formControlName="sortBy"
+        (keydown.enter)="$event.preventDefault(); searchContacts()"
+      >
+        <option value="ASC">&#xf063;</option>
+        <option value="DESC">&#xf062;</option>
+      </select>
+    </div>
+  </div>
+</form>
+

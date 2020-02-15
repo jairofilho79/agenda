@@ -6,7 +6,7 @@ import { Contact } from '../contact';
 @Injectable( { providedIn:'root' } )
 export class RegisterService {
   // API = "http://localhost:3000"
-  API = "https://jns-agenda-api.herokuapp.com"
+  API = "https://devs-agenda-api.herokuapp.com"
 
   constructor(private http: HttpClient) {}
 
