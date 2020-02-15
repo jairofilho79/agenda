@@ -1,0 +1,34 @@
+<div class="mx-5">
+  <h1 class="text-center my-3">Cadastrar contato</h1>
+
+  <form (ngSubmit)="$event.preventDefault(); register()" ngNativeValidate>
+    <div class="form-group">
+      <label for="name">*Nome:</label>
+      <input type="text" class="form-control" id="name" placeholder="Nome" required>
+    </div>
+    <div class="form-group">
+      <label for="phone">*Telefone:</label>
+      <input
+        type="text"
+        class="form-control"
+        id="phone"
+        placeholder="Telefone celular ou residencial"
+        required
+        adaptativePhoneMask
+      >
+    </div>
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Email">
+    </div>
+    <button
+      type="submit"
+      class="btn btn-primary my-3"
+      [disabled]="isRegistering"
+    >
+      Cadastrar
+      <i *ngIf="isRegistering" class="fa fa-spinner fa-pulse"></i>
+    </button>
+  </form>
+</div>
+

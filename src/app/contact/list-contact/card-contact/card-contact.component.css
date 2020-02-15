@@ -1,0 +1,11 @@
+.bottom {
+  bottom: 0em;
+}
+
+input { width: 100% !important }
+
+@media (min-width: 320px) and (max-width: 768px) {
+  .card-width {
+    width:101vw;
+  }
+}
