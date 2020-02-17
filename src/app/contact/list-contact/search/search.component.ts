@@ -17,7 +17,7 @@ export class SearchComponent implements OnInit {
   ngOnInit() {
     this.searchForm = this.formBuilder.group({
       search: [''],
-      linesPerPage: ['10'],
+      linesPerPage: [''],
       orderBy: ['name'],
       sortBy: ['ASC']
     })

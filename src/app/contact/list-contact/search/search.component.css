@@ -1,3 +1,5 @@
-select {
-  font-family: FontAwesome;
+@media (min-width: 320px) and (max-width: 768px) {
+  #linesPerPage {
+    width: 43vw;
+  }
 }
