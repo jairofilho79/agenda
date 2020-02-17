@@ -14,7 +14,7 @@ import { Snippets } from 'src/shared/onlyNumber';
 export class RegisterComponent implements OnInit {
 
   private contact:Contact = new Contact();
-  private registerForm: FormGroup;
+  registerForm: FormGroup;
 
   isRegistering:boolean = false;
 
