@@ -18,6 +18,7 @@ export class ListContactService {
     if(userParams != null) {
       const keys = Object.keys(userParams);
       for (let key of keys) {
+        if(!userParams[key]) continue;
         params = params.append(key, userParams[key]);
       }
     }

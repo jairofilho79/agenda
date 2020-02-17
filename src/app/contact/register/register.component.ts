@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Contact } from '../contact';
 import { RegisterService } from './register.service';
 import { ToastrService } from 'ngx-toastr';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Snippets } from 'src/shared/onlyNumber';
 
 
 @Component({
@@ -12,45 +14,34 @@ import { ToastrService } from 'ngx-toastr';
 export class RegisterComponent implements OnInit {
 
   private contact:Contact = new Contact();
-
-  private nameInput;
-  private emailInput;
-  private phoneInput;
+  private registerForm: FormGroup;
 
   isRegistering:boolean = false;
 
   constructor(
     private registerService:RegisterService,
-    private toast: ToastrService
+    private toast: ToastrService,
+    private formBuilder:FormBuilder
     ) { }
 
   ngOnInit() {
-    this.nameInput = (<HTMLInputElement>document.querySelector("#name"))
-    this.emailInput = (<HTMLInputElement>document.querySelector("#email"))
-    this.phoneInput = (<HTMLInputElement>document.querySelector("#phone"))
+    this.registerForm = this.formBuilder.group({
+      name: ['', Validators.required],
+      phone: ['', Validators.required],
+      email: ['']
+    })
   }
 
   register() {
     this.isRegistering = true
-    this.contact.name = this.nameInput.value;
-    this.contact.email = this.emailInput.value;
-    const phone = this.registerService.validatePhone(this.phoneInput.value);
-
-    if(phone === false) {
-      this.phoneInput.value;
-      this.phoneInput.focus();
-      this.isRegistering = false;
-      this.toast.warning("Telefone Inválido", "Atenção!")
-      return;
-    }
-
-    this.contact.phone = <number>phone;
+    const formValue = this.registerForm.getRawValue();
+    this.contact.name = formValue.name;
+    this.contact.email = formValue.email;
+    this.contact.phone = <number>Snippets.onlyTelefoneNumbers(formValue.phone);
 
     this.registerService.registerContact(this.contact).subscribe(
       () => {
-        this.nameInput.value = ""
-        this.emailInput.value = ""
-        this.phoneInput.value = ""
+        this.registerForm.reset();
         this.isRegistering = false;
         this.toast.success('Contato salvo!', "Sucesso!")
       },

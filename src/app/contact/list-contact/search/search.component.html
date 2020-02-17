@@ -11,19 +11,21 @@
     >
   </div>
 
-  <div class="form-group d-flex justify-content-around" >
+  <div class="form-group d-flex justify-content-between" >
     <div>
-      <label class="control-label mr-1" for="linePerPage">Contatos por página:</label>
       <input
+        class="form-control"
         formControlName="linesPerPage"
         type="number"
-        id="linePerPage"
+        id="linesPerPage"
         (keydown.enter)="$event.preventDefault(); searchContacts()"
+        placeholder="N° por Pág: 10"
       >
     </div>
 
     <div>
       <select
+        class="form-control"
         name="orderBy"
         formControlName="orderBy"
         (keydown.enter)="$event.preventDefault(); searchContacts()"
@@ -37,15 +39,22 @@
     <div>
 
       <select
+        class="form-control"
         name="sortBy"
         id="sortBy"
         formControlName="sortBy"
         (keydown.enter)="$event.preventDefault(); searchContacts()"
       >
-        <option value="ASC">&#xf063;</option>
-        <option value="DESC">&#xf062;</option>
+        <option value="ASC">A-Z</option>
+        <option value="DESC">Z-A</option>
       </select>
     </div>
   </div>
+  <button
+    class="btn btn-primary btn-block"
+    (click)="searchContacts()"
+  >
+    Pesquisar
+  </button>
 </form>
 
