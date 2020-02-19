@@ -5,8 +5,24 @@
     <p class="card-text">{{contact.phone | phone}}</p>
     <p class="card-text">{{contact.email ? contact.email : 'Sem E-mail'}}</p>
     <div class="d-inline position-relative bottom">
-      <button (click)="editContact()" class="btn btn-sm btn-secondary  mr-3">Editar</button>
-      <button [disabled]="isDeleting" (click)="deleteContact()" class="btn btn-sm btn-danger">Excluir <i *ngIf="isDeleting" class="fa fa-spinner fa-pulse"></i></button>
+      <button
+        (click)="editContact()"
+        class="btn btn-sm btn-secondary mr-3"
+      >
+        Editar
+      </button>
+      <button
+        [disabled]="isDeleting"
+        (click)="deleteContact()"
+        class="btn btn-sm btn-danger"
+      >
+        Excluir
+        <i
+          *ngIf="isDeleting"
+          class="fa fa-spinner fa-pulse"
+        >
+        </i>
+      </button>
     </div>
   </div>
 </div>
@@ -14,9 +30,30 @@
 <ng-template #editMode>
   <div class="card" style="width: 18rem;">
     <div class="card-body">
-      <input class="form-control" id="name" class="my-2" type="text" [value]="contact.name">
-      <input class="form-control" id="phone" class="my-2" type="text" [value]="contact.phone">
-      <input class="form-control" id="email" class="my-2" type="text" [value]="contact.email">
+      <form [formGroup]="editForm">
+        <input
+          class="form-control"
+          id="name"
+          class="my-2"
+          type="text"
+          formControlName="name"
+          >
+        <input
+          class="form-control"
+          id="phone"
+          class="my-2"
+          type="text"
+          formControlName="phone"
+          adaptativePhoneMask
+        >
+        <input
+          class="form-control"
+          id="email"
+          class="my-2"
+          type="text"
+          formControlName="email"
+        >
+      </form>
       <div class="my-2" class="d-inline position-relative bottom">
         <button
           [disabled]="isSaving"
