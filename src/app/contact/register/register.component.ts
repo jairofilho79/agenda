@@ -3,7 +3,7 @@ import { Contact } from '../contact';
 import { RegisterService } from './register.service';
 import { ToastrService } from 'ngx-toastr';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Snippets } from 'src/shared/onlyNumber';
+import { Snippets } from 'src/shared/Snippets';
 
 
 @Component({
@@ -47,9 +47,14 @@ export class RegisterComponent implements OnInit {
       },
       err => {
         this.isRegistering = false;
-        for(let error of err.errors) {
-          this.toast.error(error, "Erro!");
+        if(err.errors) {
+          for(let error of err.errors) {
+            this.toast.error(error, "Erro!");
+          }
+          return
         }
+        this.toast.error("Erro no servidor!", "Erro!");
+        console.error(err)
       }
     )
   }

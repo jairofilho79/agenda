@@ -2,8 +2,9 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { Contact } from '../../contact';
 import { ListContactService } from '../list-contact.service';
-import { RegisterService } from '../../register/register.service';
 import { ToastrService } from 'ngx-toastr';
+import { Snippets } from 'src/shared/Snippets';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-card-contact',
@@ -14,18 +15,30 @@ export class CardContactComponent implements OnInit {
 
   @Input() contact:Contact;
   @Output() deleteContactEvent = new EventEmitter()
-  editContactObj:any = {}
   isEditing:boolean = false;
   isSaving:boolean = false;
   isDeleting:boolean = false;
+  editForm:FormGroup;
 
   constructor(
     private listContactService:ListContactService,
-    private registerService:RegisterService,
-    private toast:ToastrService
+    private toast:ToastrService,
+    private formBuilder:FormBuilder
     ) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.editForm = this.formBuilder.group({
+      name: [this.contact.name],
+      phone: [
+        Snippets.buildPhoneMask(
+          Snippets.onlyTelefoneNumbers(
+            ''+this.contact.phone
+          )
+        )
+      ],
+      email: [this.contact.email ? this.contact.email : '']
+    })
+  }
 
   editContact() {
     this.isEditing = true;
@@ -37,21 +50,13 @@ export class CardContactComponent implements OnInit {
 
   saveContact() {
     this.isSaving = true;
-    const phone = (<HTMLInputElement>document.querySelector("#phone"))
 
-    this.editContactObj.id = this.contact.id;
-    this.editContactObj.name = (<HTMLInputElement>document.querySelector("#name")).value
-    this.editContactObj.email = (<HTMLInputElement>document.querySelector("#email")).value
-    this.editContactObj.phone = this.registerService.validatePhone(phone.value)
+    let formValue = <Contact>this.editForm.getRawValue()
 
-    if(this.editContactObj.phone === false) {
-      phone.focus();
-      this.isSaving = false;
-      this.toast.error('Telefone inválido', 'Erro!')
-      return;
-    }
+    formValue.id = this.contact.id;
+    formValue.phone = Snippets.onlyTelefoneNumbers(formValue.phone);
 
-    this.listContactService.editContact(this.editContactObj)
+    this.listContactService.editContact(formValue)
     .subscribe(
       response => {
         this.contact = response.data;
@@ -61,9 +66,14 @@ export class CardContactComponent implements OnInit {
       },
       err => {
         this.isSaving = false;
-        for(let error of err.errors) {
-          this.toast.error(error, "Erro!");
+        if(err.errors) {
+          for(let error of err.errors) {
+            this.toast.error(error, "Erro!");
+          }
+          return
         }
+        this.toast.error("Erro no servidor!", "Erro!");
+        console.error(err)
       }
     )
   }
@@ -72,17 +82,24 @@ export class CardContactComponent implements OnInit {
     this.isDeleting = true;
 
     this.listContactService.deleteContact(this.contact.id)
-      .subscribe((response:any) => {
-        if(response.errors) {
-          for(let error of response.errors) {
-            this.toast.error(error);
-            return;
+      .subscribe(
+        () => {
+          this.deleteContactEvent.emit("");
+          this.isDeleting = false;
+          this.toast.success('Contato excluído!', 'Sucesso!')
+        },
+        err => {
+          this.isDeleting = false;
+          if(err.errors) {
+            for(let error of err.errors) {
+              this.toast.error(error, "Erro!");
+            }
+            return
           }
+          this.toast.error("Erro no servidor!", "Erro!");
+          console.error(err)
         }
-        this.deleteContactEvent.emit("");
-        this.isDeleting = false;
-        this.toast.success('Contato excluído!', 'Sucesso!')
-      })
+      )
   }
 
 }
