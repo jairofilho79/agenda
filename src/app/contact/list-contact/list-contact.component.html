@@ -1,7 +1,7 @@
 <div class="mx-lg-5 mx-md-3 mx-sm-0">
   <h1 class="text-center my-3">Seus contatos</h1>
 
-  <div *ngIf="contacts.length; else NoContacts">
+  <div *ngIf="contacts.length; else noContacts">
     <app-search
       (userParamsEvent)="setUserParams($event)"
       [isSearching]="isSearching"
