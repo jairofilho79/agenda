@@ -1,0 +1,50 @@
+<div class="container mt-3">
+  <h1>Login</h1>
+  <form [formGroup]="signinForm" (submit)="$event.preventDefault(); login()">
+    <div class="form-group">
+      <label for="email">
+        E-mail
+        <span
+          class="text-danger"
+          *ngIf="
+            signinForm.get('email').errors?.required ||
+            signinForm.get('email').errors?.email
+          "
+        >
+          *
+        </span>
+      </label>
+      <input
+        type="email"
+        id="email"
+        formControlName="email"
+        class="form-control"
+      >
+    </div>
+    <div class="form-group">
+      <label for="password">
+          Senha
+          <span
+            class="text-danger"
+            *ngIf="signinForm.get('password').errors?.required"
+          >
+            *
+          </span>
+      </label>
+      <input
+        type="password"
+        id="password"
+        formControlName="password"
+        class="form-control"
+      >
+    </div>
+    <button
+      type="submit"
+      class="btn btn-primary btn-block"
+      [disabled]="isLogging || signinForm.invalid"
+    >
+      Entrar
+      <i *ngIf="isLogging" class="fa fa-spinner fa-pulse"></i>
+    </button>
+  </form>
+</div>

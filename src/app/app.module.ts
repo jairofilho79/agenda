@@ -7,21 +7,25 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NotFoundComponent } from './error/not-found/not-found.component';
-import { ContactModule } from './contact/contact.module';
 import { LoaderComponent } from './loader/loader.component';
 import { LoaderService } from './loader.service';
 import { LoaderInterceptor } from './loader.interceptor';
+import { ContactModule } from './contact/contact.module';
+import { HomeModule } from './home/home.module';
+import { HeaderModule } from './core/header/header.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     NotFoundComponent,
-    LoaderComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ContactModule,
+    HomeModule,
+    HeaderModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({
       timeOut:3000,

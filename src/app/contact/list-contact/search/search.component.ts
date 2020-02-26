@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { SearchParams } from './searchParams';
 
@@ -10,6 +10,7 @@ import { SearchParams } from './searchParams';
 export class SearchComponent implements OnInit {
 
   searchForm: FormGroup;
+  @Input() isSearching = false;
   @Output() userParamsEvent = new EventEmitter();
 
   constructor(private formBuilder: FormBuilder) { }
@@ -24,6 +25,7 @@ export class SearchComponent implements OnInit {
   }
 
   searchContacts() {
+    this.isSearching = true;
     this.userParamsEvent.emit((<SearchParams>this.searchForm.getRawValue()))
   }
 

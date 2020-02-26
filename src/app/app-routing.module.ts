@@ -7,27 +7,51 @@ import { RegisterComponent } from './contact/register/register.component';
 import { NotFoundComponent } from './error/not-found/not-found.component';
 import { ListContactResolver } from './contact/list-contact/list-contact.resolver';
 import { WelcomeComponent } from './contact/welcome/welcome.component';
+import { HomeComponent } from './home/home.component';
+import { SigninComponent } from './home/signin/signin.component';
+import { SignupComponent } from './home/signup/signup.component';
+import { UserGuard } from './core/user/user.guard';
+import { AuthGuard } from './core/auth/auth.guard';
+import { UserChildGuard } from './core/user/user-child.guard';
 
 
 const routes: Routes = [
   {
-    path: 'contacts',
-    component: ContactComponent,
+    path:'',
+    component: HomeComponent,
     children: [
       {
-        path:'',
+        path: '',
         component: WelcomeComponent
       },
       {
-        path: 'list-contact',
+        path: 'signin',
+        component: SigninComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'signup',
+        component: SignupComponent,
+        canActivate: [AuthGuard]
+      }
+    ]
+  },
+  {
+    path: 'contacts',
+    component: ContactComponent,
+    canActivate: [UserGuard],
+    canActivateChild: [UserChildGuard],
+    children: [
+      {
+        path: '',
         component: ListContactComponent,
         resolve: {
           contacts: ListContactResolver
-        }},
+        }
+      },
       {path: 'register', component: RegisterComponent}
     ]
   },
-  {path:'', redirectTo: 'contacts', pathMatch: 'full'},
   {path: '**', component: NotFoundComponent}
 ];
 

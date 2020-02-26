@@ -1,0 +1,12 @@
+@media (min-width: 991px) {
+  .disappear-in-large-screen {
+    display: none;
+  }
+}
+
+@media (max-width: 991px) {
+  .disappear-in-small-screen {
+    display: none;
+  }
+}
+
