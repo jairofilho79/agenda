@@ -53,8 +53,10 @@
   <button
     class="btn btn-primary btn-block"
     (click)="searchContacts()"
+    [disabled]="isSearching"
   >
     Pesquisar
+    <i *ngIf="isSearching" class="fa fa-spinner fa-pulse"></i>
   </button>
 </form>
 

@@ -1,4 +1,4 @@
-<div class="mx-5">
+<div class="container mt-3">
   <h1 class="text-center my-3">Cadastrar contato</h1>
 
   <form [formGroup]="registerForm" (ngSubmit)="$event.preventDefault(); register()">
@@ -14,7 +14,7 @@
     <div class="form-group">
       <label for="phone">*Telefone:</label>
       <input
-        type="text"
+        type="tel"
         class="form-control"
         formControlName="phone"
         placeholder="Telefone celular ou residencial"
@@ -33,11 +33,11 @@
     </div>
     <button
       type="submit"
-      class="btn btn-primary my-3"
+      class="btn btn-primary btn-block my-3"
       [disabled]="registerForm.invalid || registerForm.pending || isRegistering"
     >
       Cadastrar
-      <i *ngIf="isRegistering" class="fa fa-spinner fa-pulse"></i>
+
     </button>
   </form>
 </div>

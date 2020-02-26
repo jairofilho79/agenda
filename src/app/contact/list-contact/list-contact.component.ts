@@ -13,6 +13,7 @@ export class ListContactComponent implements OnInit {
 
   contacts:Contact[];
   currentPage:number = 0;
+  isSearching = false;
   totalPages:number;
   userParams: SearchParams = <SearchParams> {};
 
@@ -22,9 +23,14 @@ export class ListContactComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
-    this.contacts = this.activatedRoute.snapshot.data.contacts.data.content;
-    this.totalPages = this.activatedRoute.snapshot.data.contacts.data.totalPages;
+    if(this.activatedRoute.snapshot.data.contacts.data) {
+      this.contacts = this.activatedRoute.snapshot.data.contacts.data.content;
+      this.totalPages = this.activatedRoute.snapshot.data.contacts.data.totalPages;
+    }
+    else {
+      this.contacts = <Contact[]>[]
+      this.totalPages = 0;
+    }
   }
 
   removeDeletedContact(index) {
@@ -62,10 +68,16 @@ export class ListContactComponent implements OnInit {
   }
 
   setUserParams(params) {
+    this.isSearching = true;
     this.userParams = params;
     this.userParams['page'] = this.currentPage;
     this.listContactService.getContacts(this.userParams)
-      .subscribe(res => this.getResponseFromGetContacts(res))
+      .subscribe(res =>
+        {
+          this.isSearching = false;
+          this.getResponseFromGetContacts(res)
+        }
+      )
   }
 
 }

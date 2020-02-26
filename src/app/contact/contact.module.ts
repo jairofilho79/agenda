@@ -13,6 +13,7 @@ import { NamePipe } from './list-contact/card-contact/name.pipe';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { SearchComponent } from './list-contact/search/search.component';
 import { PhoneMaskDirective } from './register/phoneMask.directive';
+import { HeaderModule } from '../core/header/header.module';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import { PhoneMaskDirective } from './register/phoneMask.directive';
     CommonModule,
     HttpClientModule,
     RouterModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HeaderModule
   ]
 })
 export class ContactModule { }

@@ -9,12 +9,16 @@ import {
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { LoaderService } from './loader.service';
+import { TokenService } from './core/token/token.service';
 
 @Injectable()
 export class LoaderInterceptor implements HttpInterceptor {
     private requests: HttpRequest<any>[] = [];
 
-    constructor(private loaderService: LoaderService) { }
+    constructor(
+      private loaderService: LoaderService,
+      private tokenService: TokenService
+    ) { }
 
     removeRequest(req: HttpRequest<any>) {
         const i = this.requests.indexOf(req);
@@ -25,7 +29,14 @@ export class LoaderInterceptor implements HttpInterceptor {
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-
+        if(this.tokenService.hasToken()) {
+          const token = this.tokenService.getToken();
+          req = req.clone({
+            setHeaders: {
+              'Authorization': `Bearer ${token}`
+            }
+          })
+        }
         this.requests.push(req);
         // console.log("No of requests--->" + this.requests.length);
         this.loaderService.isLoading.next(true);

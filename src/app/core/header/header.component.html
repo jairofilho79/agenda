@@ -1,0 +1,64 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <span class="navbar-brand cursorPointer" [routerLink]="['']">
+    <img class="img-fluid" src="assets/img/agenda.png" height="50vh" width="50vw" alt="Agenda" title="Agenda">
+  </span>
+  <ul class="navbar-nav ml-auto align-items-center">
+    <li
+      class="nav-item mx-3 disappear-in-large-screen"
+      *ngIf="isLogged && (user$ | async) as user"
+    >
+      <h6>{{user.sub | username}}</h6>
+    </li>
+  </ul>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav align-items-center">
+      <li
+        class="nav-item"
+        routerLinkActive="active"
+        *ngIf="isLogged"
+      >
+        <span class="nav-link cursorPointer" [routerLink]="['/', 'contacts']" >Listar Contatos</span>
+      </li>
+      <li
+        class="nav-item"
+        routerLinkActive="active"
+        *ngIf="isLogged"
+      >
+        <span class="nav-link cursorPointer" [routerLink]="['/', 'contacts', 'register']">Cadastrar Contato</span>
+      </li>
+    </ul>
+    <ul class="navbar-nav ml-auto align-items-center">
+      <li
+        class="nav-item"
+        routerLinkActive="active"
+        *ngIf="!isLogged"
+      >
+        <span class="nav-link cursorPointer" [routerLink]="['/', 'signup']">Registrar-se</span>
+      </li>
+      <li
+        class="nav-item"
+        routerLinkActive="active"
+        *ngIf="!isLogged"
+      >
+        <span class="nav-link cursorPointer" [routerLink]="['/', 'signin']">Fazer login</span>
+      </li>
+      <li
+        class="nav-item mx-3 disappear-in-small-screen"
+        *ngIf="isLogged && (user$ | async) as user"
+      >
+        <h6>{{user.sub | username}}</h6>
+      </li>
+      <li
+        class="nav-item"
+        *ngIf="isLogged"
+      >
+        <button class="btn btn-outline-primary  btn-sm" (click)="logout()">Fazer logout</button>
+      </li>
+
+    </ul>
+  </div>
+</nav>
