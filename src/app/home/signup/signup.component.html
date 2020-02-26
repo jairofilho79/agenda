@@ -49,12 +49,78 @@
           *
         </span>
       </label>
-      <input
-        type="password"
-        id="password"
-        formControlName="password"
-        class="form-control"
-      >
+      <div class="input-group">
+        <input
+          type="password"
+          id="password"
+          *ngIf="passwordHidden"
+          formControlName="password"
+          class="form-control"
+        >
+        <input
+          type="text"
+          id="password"
+          *ngIf="!passwordHidden"
+          formControlName="password"
+          class="form-control"
+        >
+        <div class="input-group-append">
+          <i
+            class="input-group-text pt-2 fa"
+            [ngClass]="{'fa-eye-slash': passwordHidden, 'fa-eye': !passwordHidden}"
+            aria-hidden="true"
+            (click)="passwordHidden = !passwordHidden"
+          >
+          </i>
+        </div>
+      </div>
+
+    </div>
+    <div class="form-group">
+      <label for="confirmPassword">
+        Confirmar Senha
+        <span
+          class="text-danger"
+          *ngIf="signupForm.get('confirmPassword').errors?.required"
+        >
+          *
+        </span>
+        <i
+          class="fa"
+          [ngClass]="{
+            'fa-check': !signupForm.errors?.checkPassword && !signupForm.get('confirmPassword').errors?.required,
+            'text-success': !signupForm.errors?.checkPassword ,
+            'text-danger': signupForm.errors?.checkPassword,
+            'fa-times': signupForm.errors?.checkPassword
+          }"
+        ></i>
+      </label>
+      <div class="input-group">
+        <input
+          type="password"
+          id="confirmPassword"
+          *ngIf="confirmPasswordHidden"
+          formControlName="confirmPassword"
+          class="form-control"
+        >
+        <input
+          type="text"
+          id="password"
+          *ngIf="!confirmPasswordHidden"
+          formControlName="confirmPassword"
+          class="form-control"
+        >
+        <div class="input-group-append">
+          <i
+            class="input-group-text pt-2 fa"
+            [ngClass]="{'fa-eye-slash': confirmPasswordHidden, 'fa-eye': !confirmPasswordHidden}"
+            aria-hidden="true"
+            (click)="confirmPasswordHidden = !confirmPasswordHidden"
+          >
+          </i>
+        </div>
+      </div>
+
     </div>
     <button
       type="submit"
