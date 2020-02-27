@@ -37,14 +37,14 @@
         routerLinkActive="active"
         *ngIf="!isLogged"
       >
-        <span class="nav-link cursorPointer" [routerLink]="['/', 'signup']">Registrar-se</span>
+        <button class="btn btn-info" [routerLink]="['/', 'signup']">Registrar-se</button>
       </li>
       <li
         class="nav-item"
         routerLinkActive="active"
         *ngIf="!isLogged"
       >
-        <span class="nav-link cursorPointer" [routerLink]="['/', 'signin']">Fazer login</span>
+      <button class="btn btn-primary ml-2" [routerLink]="['/', 'signin']">Fazer login</button>
       </li>
       <li
         class="nav-item mx-3 disappear-in-small-screen"
@@ -56,7 +56,7 @@
         class="nav-item"
         *ngIf="isLogged"
       >
-        <button class="btn btn-outline-primary  btn-sm" (click)="logout()">Fazer logout</button>
+        <button class="btn btn-warning " (click)="logout()">Fazer logout</button>
       </li>
 
     </ul>

@@ -7,6 +7,7 @@ import { Snippets } from 'src/shared/Snippets';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { UserService } from 'src/app/core/user/user.service';
 import { Router } from '@angular/router';
+import { ListContactService } from '../list-contact/list-contact.service';
 
 
 @Component({
@@ -24,6 +25,7 @@ export class RegisterComponent implements OnInit {
   constructor(
     private registerService:RegisterService,
     private userService: UserService,
+    private listContactService: ListContactService,
     private toast: ToastrService,
     private router: Router,
     private formBuilder:FormBuilder,
@@ -54,7 +56,29 @@ export class RegisterComponent implements OnInit {
           .onHidden
           .subscribe(() => {
             try {
-              this.ngxSmartModalService.setModalData({addContact: true}, 'addContact');
+              this.listContactService.goGetContacts()
+                .catch(
+                  (err) => {
+                    if(err.errors) {
+                      for(let error of err.errors) {
+                        this.toast.error(error, "Erro!");
+                      }
+                      return
+                    }
+                    if(Object.getPrototypeOf(err).constructor.name === "ProgressEvent" || err.status === 401) {
+                      this.toast
+                        .error("Por favor, faça o Login", "Erro!")
+                        .onHidden
+                        .subscribe(() => {
+                          this.userService.logout()
+                          this.router.navigate(['/', 'signin'])
+                        })
+                      return;
+                    }
+                    this.toast.error("Erro no servidor!", "Erro!");
+                    console.error(err)
+                  }
+                );
               this.ngxSmartModalService.close('addContact')
             } catch(e) {}
           })
