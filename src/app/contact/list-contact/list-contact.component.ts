@@ -15,11 +15,11 @@ import { UserService } from 'src/app/core/user/user.service';
 })
 export class ListContactComponent implements OnInit {
 
-  contacts = <Contact[]> [];
-  currentPage:number = 0;
+  contacts: Contact[]
+  currentPage = 0;
   isSearching = false;
   isLoadingContacts = true;
-  totalPages:number = 0
+  totalPages:number;
   userParams: SearchParams = <SearchParams> {};
 
   constructor(
@@ -31,36 +31,40 @@ export class ListContactComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+
+    this.listContactService
+      .getContactsSubject()
+      .subscribe(contacts => this.contacts = contacts)
+
+    this.listContactService
+      .getTotalPagesSubject()
+      .subscribe(totalPages => this.totalPages = totalPages);
+
     this.isLoadingContacts = true;
-      this.listContactService.getContacts().subscribe(
-        response => {
-          this.isLoadingContacts = false;
-          if(response.data) {
-            this.contacts = response.data.content;
-            this.totalPages = response.data.totalPages;
-          }
-        },
-        err => {
-          if(err.errors) {
-            for(let error of err.errors) {
-              this.toast.error(error, "Erro!");
+      this.listContactService.goGetContacts()
+        .then(() => this.isLoadingContacts = false)
+        .catch(
+            (err) => {
+            if(err.errors) {
+              for(let error of err.errors) {
+                this.toast.error(error, "Erro!");
+              }
+              return
             }
-            return
+            if(Object.getPrototypeOf(err).constructor.name === "ProgressEvent" || err.status === 401) {
+              this.toast
+                .error("Por favor, faça o Login", "Erro!")
+                .onHidden
+                .subscribe(() => {
+                  this.userService.logout()
+                  this.router.navigate(['/', 'signin'])
+                })
+              return;
+            }
+            this.toast.error("Erro no servidor!", "Erro!");
+            console.error(err)
           }
-          if(Object.getPrototypeOf(err).constructor.name === "ProgressEvent" || err.status === 401) {
-            this.toast
-              .error("Por favor, faça o Login", "Erro!")
-              .onHidden
-              .subscribe(() => {
-                this.userService.logout()
-                this.router.navigate(['/', 'signin'])
-              })
-            return;
-          }
-          this.toast.error("Erro no servidor!", "Erro!");
-          console.error(err)
-        }
-      )
+        );
   }
 
   removeDeletedContact(index) {
