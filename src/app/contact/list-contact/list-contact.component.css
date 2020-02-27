@@ -1,0 +1,7 @@
+@import './card-contact/card-contact.component.css';
+
+@media (min-width: 320px) and (max-width: 768px) {
+  .fa-plus {
+    font-size:15vw!important;
+  }
+}

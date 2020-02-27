@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Contact } from '../contact';
-import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { ListContactService } from './list-contact.service';
 import { SearchParams } from './search/searchParams';
+import { NgxSmartModalService, NgxSmartModalComponent } from 'ngx-smart-modal';
+import { RegisterComponent } from '../register/register.component';
+import { ToastrService } from 'ngx-toastr';
+import { UserService } from 'src/app/core/user/user.service';
 
 @Component({
   selector: 'app-list-contact',
@@ -11,26 +15,52 @@ import { SearchParams } from './search/searchParams';
 })
 export class ListContactComponent implements OnInit {
 
-  contacts:Contact[];
+  contacts = <Contact[]> [];
   currentPage:number = 0;
   isSearching = false;
-  totalPages:number;
+  isLoadingContacts = true;
+  totalPages:number = 0
   userParams: SearchParams = <SearchParams> {};
 
   constructor(
-    private activatedRoute:ActivatedRoute,
-    private listContactService: ListContactService
+    private listContactService: ListContactService,
+    private userService: UserService,
+    private router: Router,
+    private toast: ToastrService,
+    private ngxSmartModalService: NgxSmartModalService
   ) { }
 
   ngOnInit() {
-    if(this.activatedRoute.snapshot.data.contacts.data) {
-      this.contacts = this.activatedRoute.snapshot.data.contacts.data.content;
-      this.totalPages = this.activatedRoute.snapshot.data.contacts.data.totalPages;
-    }
-    else {
-      this.contacts = <Contact[]>[]
-      this.totalPages = 0;
-    }
+    this.isLoadingContacts = true;
+      this.listContactService.getContacts().subscribe(
+        response => {
+          this.isLoadingContacts = false;
+          if(response.data) {
+            this.contacts = response.data.content;
+            this.totalPages = response.data.totalPages;
+          }
+        },
+        err => {
+          if(err.errors) {
+            for(let error of err.errors) {
+              this.toast.error(error, "Erro!");
+            }
+            return
+          }
+          if(Object.getPrototypeOf(err).constructor.name === "ProgressEvent" || err.status === 401) {
+            this.toast
+              .error("Por favor, faça o Login", "Erro!")
+              .onHidden
+              .subscribe(() => {
+                this.userService.logout()
+                this.router.navigate(['/', 'signin'])
+              })
+            return;
+          }
+          this.toast.error("Erro no servidor!", "Erro!");
+          console.error(err)
+        }
+      )
   }
 
   removeDeletedContact(index) {
@@ -78,6 +108,46 @@ export class ListContactComponent implements OnInit {
           this.getResponseFromGetContacts(res)
         }
       )
+  }
+
+  addContact() {
+    this.ngxSmartModalService
+      .create('addContact', RegisterComponent)
+      .open()
+      .onAnyCloseEventFinished
+      .subscribe((modal: NgxSmartModalComponent) => {
+
+        modal.getData() && modal.getData().addContact &&
+        this.listContactService
+          .getContacts()
+          .subscribe(
+            (response:any) => {
+              this.contacts = <Contact[]>response.data.content;
+            },
+            err => {
+              if(err.errors) {
+                for(let error of err.errors) {
+                  this.toast.error(error, "Erro!");
+                }
+                return
+              }
+              if(Object.getPrototypeOf(err).constructor.name === "ProgressEvent" || err.status === 401) {
+                this.toast
+                  .error("Por favor, faça o Login", "Erro!")
+                  .onHidden
+                  .subscribe(() => {
+                    this.userService.logout()
+                    this.router.navigate(['/', 'signin'])
+                  })
+                return;
+              }
+              this.toast.error("Erro no servidor!", "Erro!");
+              console.error(err)
+            }
+          )
+
+        this.ngxSmartModalService.removeModal('addContact');
+      })
   }
 
 }

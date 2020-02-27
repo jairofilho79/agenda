@@ -1,10 +1,17 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { FormGroup, FormBuilder } from '@angular/forms';
+
+import { ToastrService } from 'ngx-toastr';
+import { NgxSmartModalService, NgxSmartModalComponent } from 'ngx-smart-modal';
 
 import { Contact } from '../../contact';
+
 import { ListContactService } from '../list-contact.service';
-import { ToastrService } from 'ngx-toastr';
+
 import { Snippets } from 'src/shared/Snippets';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ConfirmDeleteComponent } from './confirm-delete/confirm-delete.component';
+import { UserService } from 'src/app/core/user/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-card-contact',
@@ -22,8 +29,11 @@ export class CardContactComponent implements OnInit {
 
   constructor(
     private listContactService:ListContactService,
+    private userService: UserService,
+    private router: Router,
     private toast:ToastrService,
-    private formBuilder:FormBuilder
+    private formBuilder:FormBuilder,
+    private ngxSmartModalService: NgxSmartModalService
     ) { }
 
   ngOnInit() {
@@ -72,10 +82,38 @@ export class CardContactComponent implements OnInit {
           }
           return
         }
+        if(Object.getPrototypeOf(err).constructor.name === "ProgressEvent" || err.status === 401) {
+          this.toast
+            .error("Por favor, faça o Login", "Erro!")
+            .onHidden
+            .subscribe(() => {
+              this.userService.logout()
+              this.router.navigate(['/', 'signin'])
+            })
+          return;
+        }
         this.toast.error("Erro no servidor!", "Erro!");
         console.error(err)
       }
     )
+  }
+
+  confirmDeleteContact() {
+    this.ngxSmartModalService.create(
+      'deleteContact',
+      ConfirmDeleteComponent,
+      {
+        customClass: "nsm-centered nsm-dialog-animation-ttb"
+      }
+    )
+      .open()
+      .onAnyCloseEventFinished
+      .subscribe(
+        (modal: NgxSmartModalComponent) => {
+          modal.getData() && modal.getData().deleteContact && this.deleteContact();
+          this.ngxSmartModalService.removeModal('deleteContact');
+        }
+      )
   }
 
   deleteContact() {
@@ -95,6 +133,16 @@ export class CardContactComponent implements OnInit {
               this.toast.error(error, "Erro!");
             }
             return
+          }
+          if(Object.getPrototypeOf(err).constructor.name === "ProgressEvent" || err.status === 401) {
+            this.toast
+              .error("Por favor, faça o Login", "Erro!")
+              .onHidden
+              .subscribe(() => {
+                this.userService.logout()
+                this.router.navigate(['/', 'signin'])
+              })
+            return;
           }
           this.toast.error("Erro no servidor!", "Erro!");
           console.error(err)

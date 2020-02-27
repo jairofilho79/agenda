@@ -22,7 +22,7 @@ export class ListContactService {
         params = params.append(key, userParams[key]);
       }
     }
-    return this.http.get<Contact[]>(this.API+"/contact", { params })
+    return this.http.get<any>(this.API+"/contact", { params })
   }
 
   editContact(contact:Contact) {
