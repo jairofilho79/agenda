@@ -23,20 +23,40 @@
     </div>
     <div class="form-group">
       <label for="password">
-          Senha
-          <span
-            class="text-danger"
-            *ngIf="signinForm.get('password').errors?.required"
-          >
-            *
-          </span>
+        Senha
+        <span
+          class="text-danger"
+          *ngIf="signinForm.get('password').errors?.required"
+        >
+          *
+        </span>
       </label>
-      <input
-        type="password"
-        id="password"
-        formControlName="password"
-        class="form-control"
-      >
+      <div class="input-group">
+        <input
+          type="password"
+          id="password"
+          *ngIf="passwordHidden"
+          formControlName="password"
+          class="form-control"
+        >
+        <input
+          type="text"
+          id="password"
+          *ngIf="!passwordHidden"
+          formControlName="password"
+          class="form-control"
+        >
+        <div class="input-group-append">
+          <i
+            class="input-group-text pt-2 fa"
+            [ngClass]="{'fa-eye-slash': passwordHidden, 'fa-eye': !passwordHidden}"
+            aria-hidden="true"
+            (click)="passwordHidden = !passwordHidden"
+          >
+          </i>
+        </div>
+      </div>
+
     </div>
     <button
       type="submit"

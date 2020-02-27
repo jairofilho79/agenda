@@ -14,6 +14,7 @@ export class SigninComponent implements OnInit {
 
   signinForm:FormGroup;
   isLogging = false;
+  passwordHidden = true;
 
   constructor(
     private formBuilder: FormBuilder,
