@@ -34,7 +34,7 @@ export class ListContactComponent implements OnInit {
 
     this.listContactService
       .getContactsSubject()
-      .subscribe(contacts => this.contacts = contacts)
+      .subscribe(contacts => {this.contacts = contacts; this.currentPage = 0;})
 
     this.listContactService
       .getTotalPagesSubject()
