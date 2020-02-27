@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { SignupService } from './signup.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { checkPasswordValidator } from './check-password.validator';
 
 @Component({
   selector: 'app-signup',
@@ -13,6 +14,8 @@ export class SignupComponent implements OnInit {
 
   signupForm: FormGroup;
   isRegistering = false;
+  passwordHidden = true;
+  confirmPasswordHidden = true;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -22,11 +25,17 @@ export class SignupComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.signupForm = this.formBuilder.group({
-      name: ['', Validators.required],
-      email: ['', [Validators.email, Validators.required]],
-      password: ['', Validators.required]
-    })
+    this.signupForm = this.formBuilder.group(
+      {
+        name: ['', Validators.required],
+        email: ['', [Validators.email, Validators.required]],
+        password: ['', Validators.required],
+        confirmPassword: ['',Validators.required]
+      },
+      {
+        validators: [checkPasswordValidator]
+      }
+    )
   }
 
   signup() {
@@ -56,6 +65,13 @@ export class SignupComponent implements OnInit {
           console.error(err)
         }
       )
+  }
+
+  checkPasswords(group: FormGroup) {
+    let pass = group.get('password').value;
+    let confirmPass = group.get('confirmPassword').value;
+
+    return pass === confirmPass ? null : { confirmPassword: true }
   }
 
 }

@@ -4,6 +4,9 @@ import { RegisterService } from './register.service';
 import { ToastrService } from 'ngx-toastr';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Snippets } from 'src/shared/Snippets';
+import { NgxSmartModalService } from 'ngx-smart-modal';
+import { UserService } from 'src/app/core/user/user.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -20,8 +23,11 @@ export class RegisterComponent implements OnInit {
 
   constructor(
     private registerService:RegisterService,
+    private userService: UserService,
     private toast: ToastrService,
-    private formBuilder:FormBuilder
+    private router: Router,
+    private formBuilder:FormBuilder,
+    private ngxSmartModalService: NgxSmartModalService
     ) { }
 
   ngOnInit() {
@@ -43,7 +49,15 @@ export class RegisterComponent implements OnInit {
       () => {
         this.registerForm.reset();
         this.isRegistering = false;
-        this.toast.success('Contato salvo!', "Sucesso!")
+        this.toast
+          .success('Contato salvo!', "Sucesso!")
+          .onHidden
+          .subscribe(() => {
+            try {
+              this.ngxSmartModalService.setModalData({addContact: true}, 'addContact');
+              this.ngxSmartModalService.close('addContact')
+            } catch(e) {}
+          })
       },
       err => {
         this.isRegistering = false;
@@ -52,6 +66,16 @@ export class RegisterComponent implements OnInit {
             this.toast.error(error, "Erro!");
           }
           return
+        }
+        if(Object.getPrototypeOf(err).constructor.name === "ProgressEvent" || err.status === 401) {
+          this.toast
+            .error("Por favor, faça o Login", "Erro!")
+            .onHidden
+            .subscribe(() => {
+              this.userService.logout()
+              this.router.navigate(['/', 'signin'])
+            })
+          return;
         }
         this.toast.error("Erro no servidor!", "Erro!");
         console.error(err)

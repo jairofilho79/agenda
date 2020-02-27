@@ -5,7 +5,6 @@ import { ContactComponent } from './contact/contact.component';
 import { ListContactComponent } from './contact/list-contact/list-contact.component';
 import { RegisterComponent } from './contact/register/register.component';
 import { NotFoundComponent } from './error/not-found/not-found.component';
-import { ListContactResolver } from './contact/list-contact/list-contact.resolver';
 import { WelcomeComponent } from './contact/welcome/welcome.component';
 import { HomeComponent } from './home/home.component';
 import { SigninComponent } from './home/signin/signin.component';
@@ -44,10 +43,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: ListContactComponent,
-        resolve: {
-          contacts: ListContactResolver
-        }
+        component: ListContactComponent
       },
       {path: 'register', component: RegisterComponent}
     ]
