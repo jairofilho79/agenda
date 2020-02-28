@@ -1,5 +1,5 @@
 
-<div *ngIf="!isEditing; else editMode" class="card card-width my-3">
+<div *ngIf="!isEditing; else editMode">
   <div class="card-body">
     <h5 class="card-title">{{contact.name | name}}</h5>
     <p class="card-text">{{contact.phone | phone}}</p>
@@ -28,48 +28,46 @@
 </div>
 
 <ng-template #editMode>
-  <div class="card card-width my-3" style="width: 18rem;">
-    <div class="card-body">
-      <form [formGroup]="editForm">
-        <input
-          class="form-control"
-          id="name"
-          class="my-2"
-          type="text"
-          formControlName="name"
-          >
-        <input
-          class="form-control"
-          id="phone"
-          class="my-2"
-          type="tel"
-          formControlName="phone"
-          adaptativePhoneMask
+  <div class="card-body">
+    <form [formGroup]="editForm">
+      <input
+        class="form-control"
+        id="name"
+        class="my-2"
+        type="text"
+        formControlName="name"
         >
-        <input
-          class="form-control"
-          id="email"
-          class="my-2"
-          type="text"
-          formControlName="email"
-        >
-      </form>
-      <div class="my-2" class="d-inline position-relative bottom">
-        <button
-          [disabled]="isSaving"
-          (click)="saveContact()"
-          class="btn btn-sm btn-success mr-3"
-        >
-          Salvar
-          <i *ngIf="isSaving" class="fa fa-spinner fa-pulse"></i>
-        </button>
-        <button
-          (click)="cancelEditContact()"
-          class="btn btn-sm btn-warning"
-        >
-          Cancelar
-        </button>
-      </div>
+      <input
+        class="form-control"
+        id="phone"
+        class="my-2"
+        type="tel"
+        formControlName="phone"
+        adaptativePhoneMask
+      >
+      <input
+        class="form-control"
+        id="email"
+        class="my-2"
+        type="text"
+        formControlName="email"
+      >
+    </form>
+    <div class="my-2" class="d-inline position-relative bottom">
+      <button
+        [disabled]="isSaving"
+        (click)="saveContact()"
+        class="btn btn-sm btn-success mr-3"
+      >
+        Salvar
+        <i *ngIf="isSaving" class="fa fa-spinner fa-pulse"></i>
+      </button>
+      <button
+        (click)="cancelEditContact()"
+        class="btn btn-sm btn-warning"
+      >
+        Cancelar
+      </button>
     </div>
   </div>
 </ng-template>
