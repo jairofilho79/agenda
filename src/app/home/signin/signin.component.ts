@@ -4,6 +4,7 @@ import { AuthService } from 'src/app/core/auth/auth.service';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/core/user/user.service';
 import { ToastrService } from 'ngx-toastr';
+import { ErrorHandlerService } from 'src/app/error/error-handler.service';
 
 @Component({
   selector: 'app-signin',
@@ -20,6 +21,7 @@ export class SigninComponent implements OnInit {
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private userService: UserService,
+    private errorHandler: ErrorHandlerService,
     private router: Router,
     private toast: ToastrService
   ) { }
@@ -50,20 +52,12 @@ export class SigninComponent implements OnInit {
         },
         err => {
           this.isLogging = false;
-          if(err.errors) {
-            for(let error of err.errors) {
-              this.toast.error(error, "Erro!");
-            }
-            return
-          }
           if(err.status === 401) {
             this.toast.error("Dados incorretos ou usuário não cadastrado!", "Erro!");
             return;
           }
-          this.toast.error("Erro no servidor!", "Erro!");
-          console.error(err)
+          this.errorHandler.showErrors(err);
         }
       )
   }
-
 }

@@ -1,64 +1,113 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+  <!-- Imagem da agenda -->
   <span class="navbar-brand cursorPointer" [routerLink]="['']">
     <img class="img-fluid" src="assets/img/agenda.png" height="50vh" width="50vw" alt="Agenda" title="Agenda">
   </span>
+
+  <!-- Username -->
   <ul class="navbar-nav ml-auto align-items-center">
     <li
       class="nav-item mx-3 disappear-in-large-screen"
-      *ngIf="isLogged && (user$ | async) as user"
+      *ngIf="isLogged && user"
     >
       <h6>{{user.sub | username}}</h6>
     </li>
   </ul>
 
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+  <!-- Menu -->
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-toggle="collapse"
+    data-target="#navbarNav"
+    aria-controls="navbarNav"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+  >
     <span class="navbar-toggler-icon"></span>
   </button>
+
   <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav align-items-center">
+
+    <!-- Cadastrar e Listar Contatos -->
+    <ul
+      class="navbar-nav align-items-center"
+      *ngIf="isLogged"
+    >
       <li
         class="nav-item"
         routerLinkActive="active"
-        *ngIf="isLogged"
       >
-        <span class="nav-link cursorPointer" [routerLink]="['/', 'contacts']" >Listar Contatos</span>
+        <span
+          class="nav-link cursorPointer"
+          [routerLink]="['/', 'contacts']"
+        >
+          Listar Contatos
+        </span>
       </li>
       <li
         class="nav-item"
         routerLinkActive="active"
-        *ngIf="isLogged"
+        *ngIf="user.role === 'ROLE_USER'"
       >
-        <span class="nav-link cursorPointer" [routerLink]="['/', 'contacts', 'register']">Cadastrar Contato</span>
+        <span
+          class="nav-link cursorPointer"
+          [routerLink]="['/', 'contacts', 'register']"
+        >
+          Cadastrar Contato
+        </span>
       </li>
     </ul>
-    <ul class="navbar-nav ml-auto align-items-center">
+
+    <!-- Registrar e Login -->
+    <ul
+      class="navbar-nav ml-auto align-items-center"
+      *ngIf="!isLogged"
+    >
       <li
         class="nav-item"
         routerLinkActive="active"
-        *ngIf="!isLogged"
       >
-        <button class="btn btn-info" [routerLink]="['/', 'signup']">Registrar-se</button>
+        <button
+          class="btn btn-info"
+          [routerLink]="['/', 'signup']"
+        >
+          Registrar-se
+        </button>
       </li>
       <li
         class="nav-item"
         routerLinkActive="active"
-        *ngIf="!isLogged"
       >
-      <button class="btn btn-primary ml-2" [routerLink]="['/', 'signin']">Fazer login</button>
+      <button
+        class="btn btn-primary ml-2"
+        [routerLink]="['/', 'signin']"
+      >
+        Fazer login
+      </button>
       </li>
+    </ul>
+
+    <!-- Logout e username -->
+    <ul
+      class="navbar-nav ml-auto align-items-center"
+      *ngIf="isLogged"
+    >
       <li
         class="nav-item mx-3 disappear-in-small-screen"
-        *ngIf="isLogged && (user$ | async) as user"
+        *ngIf="user"
       >
         <h6>{{user.sub | username}}</h6>
       </li>
-      <li
-        class="nav-item"
-        *ngIf="isLogged"
-      >
-        <button class="btn btn-warning " (click)="logout()">Fazer logout</button>
+      <li class="nav-item">
+        <button
+          class="btn btn-warning"
+          (click)="logout()"
+        >
+          Fazer logout
+        </button>
       </li>
-
     </ul>
   </div>
 </nav>

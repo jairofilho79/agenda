@@ -9,12 +9,17 @@ import { TokenService } from '../token/token.service';
 })
 export class UserService {
 
-  userSubject = new BehaviorSubject<any>(undefined)
+  userSubject = new BehaviorSubject<any>(undefined);
+  userRole: string;
 
   constructor(
     private tokenService:TokenService
   ) {
     this.tokenService.hasToken() && this.decodeAndNotify();
+  }
+
+  getUserRole() {
+    return this.userRole;
   }
 
   setToken(token:string) {
@@ -33,10 +38,13 @@ export class UserService {
   logout() {
     this.tokenService.removeToken();
     this.userSubject.next(undefined);
+    this.userRole = undefined;
   }
 
   decodeAndNotify() {
-    this.userSubject.next(jwt_decode(this.tokenService.getToken()));
+    const user = jwt_decode(this.tokenService.getToken());
+    this.userRole = user.role;
+    this.userSubject.next(user);
   }
 
 }

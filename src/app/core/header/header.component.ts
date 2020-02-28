@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 export class HeaderComponent implements OnInit {
 
   isLogged: boolean;
-  user$: Observable<any>
+  user;
 
   constructor(
     private userService:UserService,
@@ -20,7 +20,9 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
     this.isLogged = this.userService.isLogged();
-    this.user$ = this.userService.getUser();
+    this.userService
+      .getUser()
+      .subscribe(user => this.user = user);
   }
 
   logout() {
