@@ -1,4 +1,4 @@
-<div class="mx-lg-5 mx-md-3 mx-sm-0">
+<div class="container-fluid">
   <h1 class="text-center my-3">Seus contatos</h1>
 
   <div *ngIf="contacts.length">
@@ -10,31 +10,14 @@
     ></app-search>
 
     <!-- Contatos -->
-    <div class="card-deck my-3 justify-content-between">
-      <ng-container *ngFor="let contact of contacts; let i=index">
-        <div
-          class="w-100 d-none d-sm-block d-md-none my-2"
-          *ngIf="(i % 2) == 0"
-        ><!-- wrap every 2 on sm--></div>
-        <div
-          class="w-100 d-none d-md-block d-lg-none my-2"
-          *ngIf="(i % 3) == 0"
-        ><!-- wrap every 3 on md--></div>
-        <div
-          class="w-100 d-none d-lg-block d-xl-none my-2"
-          *ngIf="(i % 4) == 0"
-        ><!-- wrap every 4 on lg--></div>
-        <div
-          class="w-100 d-none d-xl-block my-2"
-          *ngIf="(i % 5) == 0"
-        ><!-- wrap every 5 on xl--></div>
-        <app-card-contact
-          class="card"
-          [contact]="contact"
-          (deleteContactEvent)="removeDeletedContact(i)"
-        >
-        </app-card-contact>
-      </ng-container>
+    <div class="row my-3 mx-0 no-gutters justify-content-start">
+      <app-card-contact
+        *ngFor="let contact of contacts; let i=index"
+        class="card col-12 col-sm-6 col-md-4 col-lg-3 mb-2"
+        [contact]="contact"
+        (deleteContactEvent)="removeDeletedContact(i)"
+      >
+      </app-card-contact>
     </div>
 
     <!-- Adicionar contato -->
