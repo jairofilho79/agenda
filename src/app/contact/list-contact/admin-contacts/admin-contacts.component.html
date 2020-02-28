@@ -1,0 +1,23 @@
+  <!-- Tabela de contatos -->
+
+<table
+  class="table-bordered table-responsive w-100 d-md-table my-3"
+  style="font-size: 1.3rem;"
+>
+  <thead>
+    <tr>
+      <!-- <th>Contato</th> -->
+      <th>Nome</th>
+      <th>Telefone</th>
+      <th>E-mail</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let contact of contacts; let i=index">
+      <!-- <td>{{contact.contact}}</td> -->
+      <td>{{contact.name}}</td>
+      <td>{{contact.phone}}</td>
+      <td>{{contact.email}}</td>
+    </tr>
+  </tbody>
+</table>

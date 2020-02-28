@@ -12,6 +12,7 @@ import { Snippets } from 'src/shared/Snippets';
 import { ConfirmDeleteComponent } from './confirm-delete/confirm-delete.component';
 import { UserService } from 'src/app/core/user/user.service';
 import { Router } from '@angular/router';
+import { ErrorHandlerService } from 'src/app/error/error-handler.service';
 
 @Component({
   selector: 'app-card-contact',
@@ -30,6 +31,7 @@ export class CardContactComponent implements OnInit {
   constructor(
     private listContactService:ListContactService,
     private userService: UserService,
+    private errorHandler: ErrorHandlerService,
     private router: Router,
     private toast:ToastrService,
     private formBuilder:FormBuilder,
@@ -76,24 +78,7 @@ export class CardContactComponent implements OnInit {
       },
       err => {
         this.isSaving = false;
-        if(err.errors) {
-          for(let error of err.errors) {
-            this.toast.error(error, "Erro!");
-          }
-          return
-        }
-        if(Object.getPrototypeOf(err).constructor.name === "ProgressEvent" || err.status === 401) {
-          this.toast
-            .error("Por favor, faça o Login", "Erro!")
-            .onHidden
-            .subscribe(() => {
-              this.userService.logout()
-              this.router.navigate(['/', 'signin'])
-            })
-          return;
-        }
-        this.toast.error("Erro no servidor!", "Erro!");
-        console.error(err)
+        this.errorHandler.showErrors(err);
       }
     )
   }
@@ -128,24 +113,7 @@ export class CardContactComponent implements OnInit {
         },
         err => {
           this.isDeleting = false;
-          if(err.errors) {
-            for(let error of err.errors) {
-              this.toast.error(error, "Erro!");
-            }
-            return
-          }
-          if(Object.getPrototypeOf(err).constructor.name === "ProgressEvent" || err.status === 401) {
-            this.toast
-              .error("Por favor, faça o Login", "Erro!")
-              .onHidden
-              .subscribe(() => {
-                this.userService.logout()
-                this.router.navigate(['/', 'signin'])
-              })
-            return;
-          }
-          this.toast.error("Erro no servidor!", "Erro!");
-          console.error(err)
+          this.errorHandler.showErrors(err);
         }
       )
   }

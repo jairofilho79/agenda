@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { Contact } from '../contact';
-import { Router } from '@angular/router';
-import { ListContactService } from './list-contact.service';
-import { SearchParams } from './search/searchParams';
 import { NgxSmartModalService, NgxSmartModalComponent } from 'ngx-smart-modal';
+
+import { Contact } from '../contact';
+
+import { SearchParams } from './search/searchParams';
 import { RegisterComponent } from '../register/register.component';
-import { ToastrService } from 'ngx-toastr';
+
+import { ListContactService } from './list-contact.service';
 import { UserService } from 'src/app/core/user/user.service';
+import { ErrorHandlerService } from 'src/app/error/error-handler.service';
 
 @Component({
   selector: 'app-list-contact',
@@ -21,16 +23,18 @@ export class ListContactComponent implements OnInit {
   isLoadingContacts = true;
   totalPages:number;
   userParams: SearchParams = <SearchParams> {};
+  user;
 
   constructor(
     private listContactService: ListContactService,
     private userService: UserService,
-    private router: Router,
-    private toast: ToastrService,
+    private errorHandler: ErrorHandlerService,
     private ngxSmartModalService: NgxSmartModalService
   ) { }
 
   ngOnInit() {
+
+    this.userService.getUser().subscribe(user => this.user = user);
 
     this.listContactService
       .getContactsSubject()
@@ -43,28 +47,7 @@ export class ListContactComponent implements OnInit {
     this.isLoadingContacts = true;
       this.listContactService.goGetContacts()
         .then(() => this.isLoadingContacts = false)
-        .catch(
-            (err) => {
-            if(err.errors) {
-              for(let error of err.errors) {
-                this.toast.error(error, "Erro!");
-              }
-              return
-            }
-            if(Object.getPrototypeOf(err).constructor.name === "ProgressEvent" || err.status === 401) {
-              this.toast
-                .error("Por favor, faça o Login", "Erro!")
-                .onHidden
-                .subscribe(() => {
-                  this.userService.logout()
-                  this.router.navigate(['/', 'signin'])
-                })
-              return;
-            }
-            this.toast.error("Erro no servidor!", "Erro!");
-            console.error(err)
-          }
-        );
+        .catch(err => this.errorHandler.showErrors(err));
   }
 
   removeDeletedContact(index) {
@@ -128,26 +111,7 @@ export class ListContactComponent implements OnInit {
             (response:any) => {
               this.contacts = <Contact[]>response.data.content;
             },
-            err => {
-              if(err.errors) {
-                for(let error of err.errors) {
-                  this.toast.error(error, "Erro!");
-                }
-                return
-              }
-              if(Object.getPrototypeOf(err).constructor.name === "ProgressEvent" || err.status === 401) {
-                this.toast
-                  .error("Por favor, faça o Login", "Erro!")
-                  .onHidden
-                  .subscribe(() => {
-                    this.userService.logout()
-                    this.router.navigate(['/', 'signin'])
-                  })
-                return;
-              }
-              this.toast.error("Erro no servidor!", "Erro!");
-              console.error(err)
-            }
+            err => this.errorHandler.showErrors(err)
           )
 
         this.ngxSmartModalService.removeModal('addContact');

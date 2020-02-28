@@ -12,6 +12,7 @@ import { SignupComponent } from './home/signup/signup.component';
 import { UserGuard } from './core/user/user.guard';
 import { AuthGuard } from './core/auth/auth.guard';
 import { UserChildGuard } from './core/user/user-child.guard';
+import { UserRoleGuard } from './core/user/user-role.guard';
 
 
 const routes: Routes = [
@@ -45,7 +46,11 @@ const routes: Routes = [
         path: '',
         component: ListContactComponent
       },
-      {path: 'register', component: RegisterComponent}
+      {
+        path: 'register',
+        component: RegisterComponent,
+        canActivate: [UserRoleGuard]
+      }
     ]
   },
   {path: '**', component: NotFoundComponent}

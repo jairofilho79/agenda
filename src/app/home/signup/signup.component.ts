@@ -4,6 +4,7 @@ import { SignupService } from './signup.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { checkPasswordValidator } from './check-password.validator';
+import { ErrorHandlerService } from 'src/app/error/error-handler.service';
 
 @Component({
   selector: 'app-signup',
@@ -20,6 +21,7 @@ export class SignupComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private signupService: SignupService,
+    private errorHandler: ErrorHandlerService,
     private router: Router,
     private toast: ToastrService
   ) { }
@@ -55,14 +57,7 @@ export class SignupComponent implements OnInit {
         },
         err => {
           this.isRegistering = false;
-          if(err.errors) {
-            for(let error of err.errors) {
-              this.toast.error(error, "Erro!");
-            }
-            return
-          }
-          this.toast.error("Erro no servidor!", "Erro!");
-          console.error(err)
+          this.errorHandler.showErrors(err);
         }
       )
   }
