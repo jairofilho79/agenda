@@ -1,9 +1,9 @@
 <div class="container-fluid">
   <h1 class="text-center my-3">
-    {{user.role === "ROLE_ADMIN" ? "Contatos" : "Seus contatos"}}
+    {{user.role == ADMIN ? "Contatos" : "Seus contatos"}}
   </h1>
 
-  <div *ngIf="contacts.length">
+  <div *ngIf="contents.length">
 
     <!-- Pesquisar contatos -->
     <app-search
@@ -14,10 +14,10 @@
     <!-- Contatos -->
     <div
       class="row my-3 mx-0 no-gutters justify-content-start"
-      *ngIf="user.role === 'ROLE_USER'"
+      *ngIf="user.role === USER"
     >
       <app-card-contact
-        *ngFor="let contact of contacts; let i=index"
+        *ngFor="let contact of contents; let i=index"
         class="card col-12 col-sm-6 col-md-4 col-lg-3 mb-2"
         [contact]="contact"
         (deleteContactEvent)="removeDeletedContact(i)"
@@ -29,7 +29,7 @@
     <div
         class="card bg-secondary my-3 p-5"
         (click)="addContact()"
-        *ngIf="user.role === 'ROLE_USER'"
+        *ngIf="user.role === USER"
       >
         <div class="card-body mx-auto">
           <div
@@ -43,9 +43,9 @@
 
     <!-- Tabela de contatos para o admin -->
     <app-admin-contacts
-      *ngIf="user.role === 'ROLE_ADMIN'"
+      *ngIf="user.role === ADMIN"
       class="my-3"
-      [contacts]="contacts"
+      [users]="contents"
     >
     </app-admin-contacts>
 
@@ -88,7 +88,7 @@
   <!-- Nenhum contato encontrado -->
   <div
     class="mx-3"
-    *ngIf="!contacts.length && !isLoadingContacts"
+    *ngIf="!contents.length && !isLoadingContacts && USER"
   >
     <h3 class="text-muted">Nenhum contato foi encontrado. Por favor, registre um contato.</h3>
   </div>

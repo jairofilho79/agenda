@@ -7,7 +7,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class AdminContactsComponent implements OnInit {
 
-  @Input() contacts;
+  @Input() users;
 
   constructor() { }
 
