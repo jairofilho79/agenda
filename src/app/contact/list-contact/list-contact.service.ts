@@ -5,13 +5,23 @@ import { environment } from 'src/environments/environment';
 import { Contact } from '../contact';
 import { SearchParams } from './search/searchParams';
 import { BehaviorSubject } from 'rxjs';
+import { User } from '../User';
 
 @Injectable({providedIn: 'root'})
 export class ListContactService {
   constructor(private http: HttpClient) {}
 
   contactsSubject = new BehaviorSubject<Contact[]>([]);
+  usersSubject = new BehaviorSubject<User[]>([]);
   totalPagesSubject = new BehaviorSubject<number>(0);
+
+  ADMIN = environment.ADMIN_ROLE;
+  USER = environment.USER_ROLE;
+
+  pathToGetContents = {
+    [this.ADMIN]: "/user/all",
+    [this.USER]: "/contact"
+  }
 
   // API = "http://localhost:3000"
   API = environment.API_URI;
@@ -20,16 +30,34 @@ export class ListContactService {
     return this.contactsSubject.asObservable();
   }
 
+  getUsersSubject() {
+    return this.usersSubject.asObservable();
+  }
+
+  subjects = {
+    [this.ADMIN]: this.usersSubject,
+    [this.USER]: this.contactsSubject
+  }
+
+  subjectsObservables = {
+    [this.ADMIN]: 'getUsersSubject',
+    [this.USER]: 'getContactsSubject'
+  }
+
+  getSubject(role: string) {
+    return eval(`this.${this.subjectsObservables[role]}()`);
+  }
+
   getTotalPagesSubject() {
     return this.totalPagesSubject.asObservable();
   }
 
-  goGetContacts() {
+  goGet(role: string) {
     return new Promise((resolve, reject) => {
-      this.getContacts().subscribe(
+      this.get(role).subscribe(
         response => {
           if(response.data) {
-            this.contactsSubject.next(response.data.content);
+            this.subjects[role].next(response.data.content);
             this.totalPagesSubject.next(response.data.totalPages);
             resolve()
           }
@@ -39,11 +67,9 @@ export class ListContactService {
         }
       )
     })
-
-
   }
 
-  getContacts(userParams: SearchParams = null) {
+  get(role: string, userParams: SearchParams = null) {
     let params = new HttpParams();
 
     if(userParams != null) {
@@ -53,7 +79,7 @@ export class ListContactService {
         params = params.append(key, userParams[key]);
       }
     }
-    return this.http.get<any>(this.API+"/contact", { params })
+    return this.http.get<any>(this.API+this.pathToGetContents[role], { params })
   }
 
   editContact(contact:Contact) {

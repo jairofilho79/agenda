@@ -5,8 +5,6 @@ import { ToastrService } from 'ngx-toastr';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Snippets } from 'src/shared/Snippets';
 import { NgxSmartModalService } from 'ngx-smart-modal';
-import { UserService } from 'src/app/core/user/user.service';
-import { Router } from '@angular/router';
 import { ListContactService } from '../list-contact/list-contact.service';
 import { ErrorHandlerService } from 'src/app/error/error-handler.service';
 
@@ -56,7 +54,7 @@ export class RegisterComponent implements OnInit {
           .onHidden
           .subscribe(() => {
             try {
-              this.listContactService.goGetContacts()
+              this.listContactService.goGet("USER")
                 .catch(err => this.errorHandler.showErrors(err));
 
               this.ngxSmartModalService.close('addContact')

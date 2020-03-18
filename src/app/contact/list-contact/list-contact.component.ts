@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NgxSmartModalService, NgxSmartModalComponent } from 'ngx-smart-modal';
 
+import { environment } from 'src/environments/environment';
+
 import { Contact } from '../contact';
 
 import { SearchParams } from './search/searchParams';
@@ -9,6 +11,7 @@ import { RegisterComponent } from '../register/register.component';
 import { ListContactService } from './list-contact.service';
 import { UserService } from 'src/app/core/user/user.service';
 import { ErrorHandlerService } from 'src/app/error/error-handler.service';
+import { User } from '../User';
 
 @Component({
   selector: 'app-list-contact',
@@ -17,13 +20,15 @@ import { ErrorHandlerService } from 'src/app/error/error-handler.service';
 })
 export class ListContactComponent implements OnInit {
 
-  contacts: Contact[]
+  contents: Contact[] | User[]
   currentPage = 0;
   isSearching = false;
   isLoadingContacts = true;
   totalPages:number;
   userParams: SearchParams = <SearchParams> {};
   user;
+  ADMIN = environment.ADMIN_ROLE;
+  USER = environment.USER_ROLE;
 
   constructor(
     private listContactService: ListContactService,
@@ -34,31 +39,40 @@ export class ListContactComponent implements OnInit {
 
   ngOnInit() {
 
-    this.userService.getUser().subscribe(user => this.user = user);
+    this.userService
+      .getUser()
+      .subscribe(user => {
+        this.user = user;
 
-    this.listContactService
-      .getContactsSubject()
-      .subscribe(contacts => {this.contacts = contacts; this.currentPage = 0;})
+        this.listContactService
+          .getSubject(this.user.role)
+          .subscribe(contents => {
+            this.contents = contents;
+            this.currentPage = 0;
+          })
+
+        this.listContactService.goGet(this.user.role)
+          .then(() => {this.isLoadingContacts = false})
+          .catch(err => this.errorHandler.showErrors(err));
+
+      });
 
     this.listContactService
       .getTotalPagesSubject()
       .subscribe(totalPages => this.totalPages = totalPages);
 
     this.isLoadingContacts = true;
-      this.listContactService.goGetContacts()
-        .then(() => this.isLoadingContacts = false)
-        .catch(err => this.errorHandler.showErrors(err));
   }
 
   removeDeletedContact(index) {
-    this.contacts.splice(index, 1)
+    this.contents.splice(index, 1)
   }
 
   previous() {
     if(this.currentPage <= 0) return;
     this.currentPage--;
     this.userParams.page = this.currentPage;
-    this.listContactService.getContacts(this.userParams)
+    this.listContactService.get(this.user.role, this.userParams)
       .subscribe(res => this.getResponseFromGetContacts(res))
   }
 
@@ -66,7 +80,7 @@ export class ListContactComponent implements OnInit {
     if(i === this.currentPage) return;
     this.currentPage = i;
     this.userParams.page = this.currentPage;
-    this.listContactService.getContacts(this.userParams)
+    this.listContactService.get(this.user.role,this.userParams)
       .subscribe(res => this.getResponseFromGetContacts(res))
   }
 
@@ -74,13 +88,13 @@ export class ListContactComponent implements OnInit {
     if(this.currentPage >= this.totalPages-1 ) return;
     this.currentPage++;
     this.userParams.page = this.currentPage;
-    this.listContactService.getContacts(this.userParams)
+    this.listContactService.get(this.user.role,this.userParams)
       .subscribe(res => this.getResponseFromGetContacts(res))
   }
 
   getResponseFromGetContacts(res) {
     const response = <any> res;
-    this.contacts = <Contact[]> response.data.content;
+    this.contents = <Contact[] | User[]> response.data.content;
     this.totalPages = response.data.totalPages;
   }
 
@@ -88,7 +102,7 @@ export class ListContactComponent implements OnInit {
     this.isSearching = true;
     this.userParams = params;
     this.userParams['page'] = this.currentPage;
-    this.listContactService.getContacts(this.userParams)
+    this.listContactService.get(this.user.role, this.userParams)
       .subscribe(res =>
         {
           this.isSearching = false;
@@ -104,12 +118,13 @@ export class ListContactComponent implements OnInit {
       .onAnyCloseEventFinished
       .subscribe((modal: NgxSmartModalComponent) => {
 
-        modal.getData() && modal.getData().addContact &&
-        this.listContactService
-          .getContacts()
+        modal.getData()
+        && modal.getData().addContact
+        && this.listContactService
+          .get(this.user.role)
           .subscribe(
             (response:any) => {
-              this.contacts = <Contact[]>response.data.content;
+              this.contents = <Contact[] | User[]>response.data.content;
             },
             err => this.errorHandler.showErrors(err)
           )

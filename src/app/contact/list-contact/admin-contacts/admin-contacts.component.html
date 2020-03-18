@@ -6,18 +6,20 @@
 >
   <thead>
     <tr>
-      <!-- <th>Contato</th> -->
+      <th>Id</th>
       <th>Nome</th>
-      <th>Telefone</th>
       <th>E-mail</th>
+      <th>Role</th>
+      <th>Nº Contatos</th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let contact of contacts; let i=index">
-      <!-- <td>{{contact.contact}}</td> -->
-      <td>{{contact.name}}</td>
-      <td>{{contact.phone}}</td>
-      <td>{{contact.email}}</td>
+    <tr *ngFor="let user of users">
+      <td>{{user.id}}</td>
+      <td>{{user.name}}</td>
+      <td>{{user.email}}</td>
+      <td>{{user.role}}</td>
+      <td>{{user.contacts}}</td>
     </tr>
   </tbody>
 </table>
