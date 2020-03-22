@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../user/user.service';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-header',
@@ -12,6 +12,8 @@ export class HeaderComponent implements OnInit {
 
   isLogged: boolean;
   user;
+  ADMIN = environment.ADMIN_ROLE;
+  USER = environment.USER_ROLE;
 
   constructor(
     private userService:UserService,
