@@ -43,13 +43,13 @@
           class="nav-link cursorPointer"
           [routerLink]="['/', 'contacts']"
         >
-          Listar Contatos
+          Listar {{user.role === ADMIN ? "Usuários" : "Contatos"}}
         </span>
       </li>
       <li
         class="nav-item"
         routerLinkActive="active"
-        *ngIf="user.role === 'ROLE_USER'"
+        *ngIf="user.role === USER"
       >
         <span
           class="nav-link cursorPointer"
@@ -66,23 +66,21 @@
       *ngIf="!isLogged"
     >
       <li
-        class="nav-item"
-        routerLinkActive="active"
+        class="nav-item d-block"
       >
         <button
           class="btn btn-info"
           [routerLink]="['/', 'signup']"
+          routerLinkActive="d-none"
         >
           Registrar-se
         </button>
       </li>
-      <li
-        class="nav-item"
-        routerLinkActive="active"
-      >
+      <li class="nav-item">
       <button
         class="btn btn-primary ml-2"
         [routerLink]="['/', 'signin']"
+        routerLinkActive="d-none"
       >
         Fazer login
       </button>
